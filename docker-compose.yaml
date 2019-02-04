@@ -1,0 +1,22 @@
+version: '2'
+services:
+    db:
+        image: mariadb
+        restart: always
+        volumes:
+            - ./data:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: 123456
+            MYSQL_USER: admin
+            MYSQL_PASSWORD: 123456
+            MYSQL_DATABASE: usergroups
+        ports:
+            - "32768:3306"
+
+    php:
+        build: ./api
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./api:/var/www
+        command: ["bin/console", "make:serve"]
