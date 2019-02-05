@@ -8,6 +8,8 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Swagger\Annotations as Swagger;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 class MembershipController extends AbstractFOSRestController
 {
@@ -26,8 +28,27 @@ class MembershipController extends AbstractFOSRestController
     }
 
     /**
-     * Adds a User to a Group
+     * Add a User to a Group
      * @Rest\Post("/membership/join")
+     *
+     * @Swagger\Response(
+     *     response=200,
+     *     description="Returns nothing",
+     * )
+     * @Swagger\Parameter(
+     *     name="user_id",
+     *     in="query",
+     *     type="string",
+     *     description="The user id"
+     * )
+     *
+     * @Swagger\Parameter(
+     *     name="group_id",
+     *     in="query",
+     *     type="string",
+     *     description="The group id"
+     * )
+     * @Swagger\Tag(name="Membership")
      */
     public function joinGroup(Request $request) {
         $userId = $request->get('user_id');
@@ -39,8 +60,27 @@ class MembershipController extends AbstractFOSRestController
     }
 
     /**
-     * Removes a User rom a Group
+     * Remove a User from a Group
      * @Rest\Post("/membership/quit")
+     *
+     * @Swagger\Response(
+     *     response=200,
+     *     description="Returns nothing",
+     * )
+     * @Swagger\Parameter(
+     *     name="user_id",
+     *     in="query",
+     *     type="string",
+     *     description="The user id"
+     * )
+     *
+     * @Swagger\Parameter(
+     *     name="group_id",
+     *     in="query",
+     *     type="string",
+     *     description="The group id"
+     * )
+     * @Swagger\Tag(name="Membership")
      */
     public function quitGroup(Request $request) {
         $userId = $request->get('user_id');
