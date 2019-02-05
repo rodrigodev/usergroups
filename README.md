@@ -10,10 +10,10 @@
 
 ### Setup
 
-`docker exec -it {container_id} make install_dependencies`
+`$docker exec -it {container_id} make install_dependencies`
 
-`docker exec -it {container_id} make setup`
+`$docker exec -it {container_id} make setup`
 
 ### Api Documentation
 
-http://localhost:8000/api/doc
+http://localhost/api/doc
