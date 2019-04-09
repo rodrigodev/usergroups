@@ -1,4 +1,6 @@
 {
+    "name": "User Groups",
+    "description": "A symfony API Example and Bootstrap",
     "type": "project",
     "license": "proprietary",
     "require": {
