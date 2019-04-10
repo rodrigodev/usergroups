@@ -4,6 +4,9 @@ namespace App\Service;
 
 class MembershipService
 {
+    protected $userService;
+    protected $groupService;
+
     public function __construct(UserService $userService, GroupService $groupService)
     {
         $this->userService = $userService;
