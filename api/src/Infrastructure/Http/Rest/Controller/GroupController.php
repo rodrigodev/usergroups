@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Controller;
+namespace App\Infrastructure\Http\Rest\Controller;
 
-use App\Service\GroupService;
+use App\Infrastructure\Service\GroupService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
-class GroupController extends AbstractFOSRestController
+final class GroupController extends AbstractFOSRestController
 {
     /**
      * @var GroupService
