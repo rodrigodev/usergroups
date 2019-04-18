@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Infrastructure\Http\Rest\Controller;
 
-use App\Service\UserService;
+use App\Infrastructure\Service\UserService;
 use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,7 +10,7 @@ use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
-class UserController extends AbstractFOSRestController
+final class UserController extends AbstractFOSRestController
 {
     /**
      * @var UserService

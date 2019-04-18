@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Infrastructure\Http\Rest\Controller;
 
-use App\Service\MembershipService;
+use App\Infrastructure\Service\MembershipService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Swagger\Annotations as Swagger;
 use Nelmio\ApiDocBundle\Annotation\Model;
 
-class MembershipController extends AbstractFOSRestController
+final class MembershipController extends AbstractFOSRestController
 {
     /**
      * @var MembershipService

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Service;
+namespace App\Application\Service;
 
-use App\Entity\Group;
-use App\Repository\GroupRepository;
+use App\Domain\Model\Group;
+use App\Infrastructure\Repository\GroupRepository;
 
 final class GroupService
 {
