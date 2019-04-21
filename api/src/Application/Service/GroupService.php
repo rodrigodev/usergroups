@@ -12,7 +12,7 @@ use Doctrine\ORM\EntityNotFoundException;
 final class GroupService
 {
     /**
-     * @var GroupRepository
+     * @var GroupRepositoryInterface
      */
     private $groupRepository;
 

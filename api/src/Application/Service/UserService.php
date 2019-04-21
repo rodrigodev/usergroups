@@ -2,60 +2,103 @@
 
 namespace App\Application\Service;
 
+use App\Application\DTO\User\UserAssembler;
+use App\Application\DTO\User\UserDTO;
 use App\Domain\Model\User\User;
+use App\Domain\Model\User\UserRepositoryInterface;
 use App\Infrastructure\Repository\UserRepository;
+use Doctrine\ORM\EntityNotFoundException;
 
 final class UserService
 {
     /**
-     * @var UserRepository
+     * @var UserRepositoryInterface
      */
     private $userRepository;
 
-    public function __construct(UserRepository $userRepository){
+    /**
+     * @var UserAssembler
+     */
+    private $userAssembler;
+
+    /**
+     * UserService constructor.
+     * @param UserRepositoryInterface $userRepository
+     * @param UserAssembler $userAssembler
+     */
+    public function __construct(
+        UserRepositoryInterface $userRepository,
+        UserAssembler $userAssembler
+
+    ){
         $this->userRepository = $userRepository;
+        $this->userAssembler = $userAssembler;
     }
 
+    /**
+     * @param int $userId
+     * @return User|null
+     * @throws EntityNotFoundException
+     */
     public function getUser(int $userId): ?User
     {
-        return $this->userRepository->find($userId);
+        $user = $this->userRepository->find($userId);
+        if (!$user) {
+            throw new EntityNotFoundException(sprintf('User with id %d not found!', $userId));
+        }
+
+        return $user;
     }
 
+    /**
+     * @return array|null
+     */
     public function getAllUsers(): ?array
     {
         return $this->userRepository->findAll();
     }
 
-    public function save(User $user): User
+    /**
+     * @param UserDTO $userDTO
+     * @return User
+     */
+    public function addUser(UserDTO $userDTO): User
     {
+        $user = $this->userAssembler->createUser($userDTO);
         $this->userRepository->save($user);
+
         return $user;
     }
 
-    public function addUser(string $name): User
-    {
-        $user = new User();
-        $user->setName($name);
-        $this->userRepository->save($user);
-        return $user;
-    }
-
-    public function updateUser(int $userId, string $name): ?User
+    /**
+     * @param int $userId
+     * @param UserDTO $userDTO
+     * @return User|null
+     * @throws EntityNotFoundException
+     */
+    public function updateUser(int $userId, UserDTO $userDTO): ?User
     {
         $user = $this->userRepository->find($userId);
         if (!$user) {
-            return null;
+            throw new EntityNotFoundException(sprintf('User with id %d not found!', $userId));
         }
-        $user->setName($name);
+        $user = $this->userAssembler->updateUser($user, $userDTO);
         $this->userRepository->save($user);
+
         return $user;
     }
 
+    /**
+     * @param int $userId
+     * @throws EntityNotFoundException
+     */
     public function deleteUser(int $userId): void
     {
         $user = $this->userRepository->find($userId);
-        if ($user) {
-            $this->userRepository->delete($user);
+        if (!$user) {
+            throw new EntityNotFoundException(sprintf('User with id %d not found!', $userId));
         }
+        $this->userRepository->delete($user);
+
     }
 }

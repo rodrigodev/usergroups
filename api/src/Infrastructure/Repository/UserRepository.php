@@ -3,17 +3,15 @@
 namespace App\Infrastructure\Repository;
 
 use App\Domain\Model\User\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Domain\Model\User\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
  * @method User|null findOneBy(array $criteria, array $orderBy = null)
- * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository
+class UserRepository implements UserRepositoryInterface
 {
 
     /**
@@ -21,10 +19,12 @@ class UserRepository extends ServiceEntityRepository
      */
     private $entityManager;
 
-    public function __construct(RegistryInterface $registry, EntityManagerInterface $entityManager)
+    private $repository;
+
+    public function __construct(EntityManagerInterface $entityManager)
     {
-        parent::__construct($registry, User::class);
         $this->entityManager = $entityManager;
+        $this->repository = $this->entityManager->getRepository(User::class);
     }
 
     public function save(User $user): void {
@@ -35,5 +35,22 @@ class UserRepository extends ServiceEntityRepository
     public function delete(User $user): void {
         $this->entityManager->remove($user);
         $this->entityManager->flush();
+    }
+
+    /**
+     * @param int $userId
+     * @return User|null
+     */
+    public function findById(int $userId): ?User
+    {
+        return $this->repository->find($userId);
+    }
+
+    /**
+     * @return array
+     */
+    public function findAll(): array
+    {
+        return $this->repository->findAll();
     }
 }
