@@ -12,38 +12,23 @@ final class GroupDTO
     /**
      * @var string
      */
-    private $title;
-
-    /**
-     * @var string
-     */
-    private $content;
+    private $name;
 
     /**
      * GroupDTO constructor.
      * @param string $title
-     * @param string $content
      */
-    public function __construct(string $title = '', string $content = '')
+    public function __construct(string $title)
     {
-        $this->title = $title;
-        $this->content = $content;
+        $this->name = $title;
     }
 
     /**
      * @return string
      */
-    public function getTitle(): string
+    public function getName(): string
     {
-        return $this->title;
-    }
-
-    /**
-     * @return string
-     */
-    public function getContent(): string
-    {
-        return $this->content;
+        return $this->name;
     }
 
 }

@@ -2,8 +2,7 @@
 
 namespace App\Infrastructure\Http\Rest\Controller;
 
-use App\Infrastructure\Service\UserService;
-use Doctrine\ORM\EntityManager;
+use App\Application\Service\UserService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;

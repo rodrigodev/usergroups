@@ -1,49 +1,33 @@
 <?php
 
-namespace App\Application\DTO;
+namespace App\Application\DTO\User;
 
 /**
- * Class ArticleDTO
- * @package App\Application\DTO
+ * Class UserDTO
+ * @package App\Application\User\DTO
  */
-final class ArticleDTO
+final class UserDTO
 {
 
     /**
      * @var string
      */
-    private $title;
+    private $name;
 
     /**
-     * @var string
-     */
-    private $content;
-
-    /**
-     * ArticleDTO constructor.
+     * UserDTO constructor.
      * @param string $title
-     * @param string $content
      */
-    public function __construct(string $title = '', string $content = '')
+    public function __construct(string $title)
     {
-        $this->title = $title;
-        $this->content = $content;
+        $this->name = $title;
     }
 
     /**
      * @return string
      */
-    public function getTitle(): string
+    public function getName(): string
     {
-        return $this->title;
+        return $this->name;
     }
-
-    /**
-     * @return string
-     */
-    public function getContent(): string
-    {
-        return $this->content;
-    }
-
 }

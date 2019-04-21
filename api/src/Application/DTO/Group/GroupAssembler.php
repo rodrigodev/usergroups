@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\DTO;
+namespace App\Application\DTO\Group;
 
 use App\Domain\Model\Group\Group;
 
@@ -12,50 +12,48 @@ final class GroupAssembler
 {
 
     /**
-     * @param GroupDTO $GroupDTO
-     * @param Group|null $Group
+     * @param GroupDTO $groupDTO
+     * @param Group|null $group
      * @return Group
      */
-    public function readDTO(GroupDTO $GroupDTO, ?Group $Group = null): Group
+    public function readDTO(GroupDTO $groupDTO, ?Group $group = null): Group
     {
-        if (!$Group) {
-            $Group = new Group();
+        if (!$group) {
+            $group = new Group();
         }
 
-        $Group->setContent($GroupDTO->getContent());
-        $Group->setTitle($GroupDTO->getTitle());
+        $group->setName($groupDTO->getName());
 
-        return $Group;
+        return $group;
     }
 
     /**
-     * @param Group $Group
-     * @param GroupDTO $GroupDTO
+     * @param Group $group
+     * @param GroupDTO $groupDTO
      * @return Group
      */
-    public function updateGroup(Group $Group, GroupDTO $GroupDTO): Group
+    public function updateGroup(Group $group, GroupDTO $groupDTO): Group
     {
-        return $this->readDTO($GroupDTO, $Group);
+        return $this->readDTO($groupDTO, $group);
     }
 
     /**
-     * @param GroupDTO $GroupDTO
+     * @param GroupDTO $groupDTO
      * @return Group
      */
-    public function createGroup(GroupDTO $GroupDTO): Group
+    public function createGroup(GroupDTO $groupDTO): Group
     {
-        return $this->readDTO($GroupDTO);
+        return $this->readDTO($groupDTO);
     }
 
     /**
-     * @param Group $Group
+     * @param Group $group
      * @return GroupDTO
      */
-    public function writeDTO(Group $Group)
+    public function writeDTO(Group $group): GroupDTO
     {
         return new GroupDTO(
-            $Group->getTitle(),
-            $Group->getContent()
+            $group->getName()
         );
     }
 

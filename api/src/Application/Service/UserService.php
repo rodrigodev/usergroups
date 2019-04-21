@@ -2,8 +2,8 @@
 
 namespace App\Application\Service;
 
-use App\Entity\User;
-use App\Repository\UserRepository;
+use App\Domain\Model\User\User;
+use App\Infrastructure\Repository\UserRepository;
 
 final class UserService
 {

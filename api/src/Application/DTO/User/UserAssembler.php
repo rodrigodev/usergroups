@@ -1,6 +1,5 @@
 <?php
 
-<<<<<<< HEAD
 namespace App\Application\DTO\User;
 
 use App\Domain\Model\User\User;
@@ -22,8 +21,7 @@ final class UserAssembler
             $User = new User();
         }
 
-        $User->setContent($UserDTO->getContent());
-        $User->setTitle($UserDTO->getTitle());
+        $User->setName($UserDTO->getName());
 
         return $User;
     }
@@ -51,71 +49,10 @@ final class UserAssembler
      * @param User $User
      * @return UserDTO
      */
-    public function writeDTO(User $User)
+    public function writeDTO(User $User): UserDTO
     {
         return new UserDTO(
-            $User->getTitle(),
-            $User->getContent()
-=======
-
-namespace App\Application\DTO;
-
-
-use App\Domain\Model\Article\Article;
-
-/**
- * Class ArticleAssembler
- * @package App\Application\DTO
- */
-final class ArticleAssembler
-{
-
-    /**
-     * @param ArticleDTO $articleDTO
-     * @param Article|null $article
-     * @return Article
-     */
-    public function readDTO(ArticleDTO $articleDTO, ?Article $article = null): Article
-    {
-        if (!$article) {
-            $article = new Article();
-        }
-
-        $article->setContent($articleDTO->getContent());
-        $article->setTitle($articleDTO->getTitle());
-
-        return $article;
-    }
-
-    /**
-     * @param Article $article
-     * @param ArticleDTO $articleDTO
-     * @return Article
-     */
-    public function updateArticle(Article $article, ArticleDTO $articleDTO): Article
-    {
-        return $this->readDTO($articleDTO, $article);
-    }
-
-    /**
-     * @param ArticleDTO $articleDTO
-     * @return Article
-     */
-    public function createArticle(ArticleDTO $articleDTO): Article
-    {
-        return $this->readDTO($articleDTO);
-    }
-
-    /**
-     * @param Article $article
-     * @return ArticleDTO
-     */
-    public function writeDTO(Article $article)
-    {
-        return new ArticleDTO(
-            $article->getTitle(),
-            $article->getContent()
->>>>>>> 0acfa94b34dd9e657e58812dc5a6ec1a29e6347d
+            $User->getName()
         );
     }
 

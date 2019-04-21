@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Repository;
 
-use App\Domain\Model\User;
+use App\Domain\Model\User\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -27,12 +27,12 @@ class UserRepository extends ServiceEntityRepository
         $this->entityManager = $entityManager;
     }
 
-    public function save(User $user) {
+    public function save(User $user): void {
         $this->entityManager->persist($user);
         $this->entityManager->flush();
     }
 
-    public function delete(User $user) {
+    public function delete(User $user): void {
         $this->entityManager->remove($user);
         $this->entityManager->flush();
     }

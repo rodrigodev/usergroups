@@ -22,7 +22,6 @@
         "symfony/orm-pack": "^1.0",
         "symfony/security-csrf": "4.2.*",
         "symfony/twig-bundle": "4.2.*",
-        "symfony/validator": "4.2.*",
         "symfony/web-server-bundle": "4.2.*",
         "symfony/yaml": "4.2.*"
     },
@@ -73,6 +72,7 @@
     },
     "require-dev": {
         "phpstan/phpstan": "^0.11.5",
+        "phpstan/phpstan-symfony": "^0.11.5",
         "symfony/test-pack": "^1.0"
     }
 }
