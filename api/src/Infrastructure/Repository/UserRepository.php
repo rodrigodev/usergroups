@@ -3,15 +3,18 @@
 namespace App\Infrastructure\Repository;
 
 use App\Domain\Model\User\User;
-use App\Domain\Model\User\UserRepositoryInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
  * @method User|null findOneBy(array $criteria, array $orderBy = null)
- * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @method User[]    findAll()
+ * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method User|null findById($id)
  */
-class UserRepository implements UserRepositoryInterface
+class UserRepository extends ServiceEntityRepository
 {
 
     /**
@@ -20,40 +23,29 @@ class UserRepository implements UserRepositoryInterface
     private $entityManager;
 
     /**
-     * @var ObjectRepository
+     * UserRepository constructor.
+     * @param RegistryInterface $registry
+     * @param EntityManagerInterface $entityManager
      */
-    private $repository;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(RegistryInterface $registry, EntityManagerInterface $entityManager)
     {
+        parent::__construct($registry, User::class);
         $this->entityManager = $entityManager;
-        $this->repository = $this->entityManager->getRepository(User::class);
     }
 
+    /**
+     * @param User $user
+     */
     public function save(User $user): void {
         $this->entityManager->persist($user);
         $this->entityManager->flush();
     }
 
+    /**
+     * @param User $user
+     */
     public function delete(User $user): void {
         $this->entityManager->remove($user);
         $this->entityManager->flush();
-    }
-
-    /**
-     * @param int $userId
-     * @return User|null
-     */
-    public function findUserById(int $userId): ?User
-    {
-        return $this->repository->find($userId);
-    }
-
-    /**
-     * @return array
-     */
-    public function findAllUsers(): array
-    {
-        return $this->repository->findAll();
     }
 }

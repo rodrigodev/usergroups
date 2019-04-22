@@ -5,13 +5,13 @@ namespace App\Application\Service;
 use App\Application\DTO\User\UserAssembler;
 use App\Application\DTO\User\UserDTO;
 use App\Domain\Model\User\User;
-use App\Domain\Model\User\UserRepositoryInterface;
+use App\Infrastructure\Repository\UserRepository;
 use Doctrine\ORM\EntityNotFoundException;
 
 final class UserService
 {
     /**
-     * @var UserRepositoryInterface
+     * @var UserRepository
      */
     private $userRepository;
 
@@ -22,11 +22,11 @@ final class UserService
 
     /**
      * UserService constructor.
-     * @param UserRepositoryInterface $userRepository
+     * @param UserRepository $userRepository
      * @param UserAssembler $userAssembler
      */
     public function __construct(
-        UserRepositoryInterface $userRepository,
+        UserRepository $userRepository,
         UserAssembler $userAssembler
 
     ){
@@ -41,7 +41,7 @@ final class UserService
      */
     public function getUser(int $userId): ?User
     {
-        $user = $this->userRepository->findUserById($userId);
+        $user = $this->userRepository->findById($userId);
         if (!$user) {
             throw new EntityNotFoundException(sprintf('User with id %d not found!', $userId));
         }
@@ -54,7 +54,7 @@ final class UserService
      */
     public function getAllUsers(): ?array
     {
-        return $this->userRepository->findAllUsers();
+        return $this->userRepository->findAll();
     }
 
     /**
@@ -77,7 +77,7 @@ final class UserService
      */
     public function updateUser(int $userId, UserDTO $userDTO): ?User
     {
-        $user = $this->userRepository->findUserById($userId);
+        $user = $this->userRepository->findById($userId);
         if (!$user) {
             throw new EntityNotFoundException(sprintf('User with id %d not found!', $userId));
         }
@@ -93,7 +93,7 @@ final class UserService
      */
     public function deleteUser(int $userId): void
     {
-        $user = $this->userRepository->findUserById($userId);
+        $user = $this->userRepository->findById($userId);
         if (!$user) {
             throw new EntityNotFoundException(sprintf('User with id %d not found!', $userId));
         }

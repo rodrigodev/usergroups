@@ -5,14 +5,13 @@ namespace App\Application\Service;
 use App\Application\DTO\Group\GroupAssembler;
 use App\Application\DTO\Group\GroupDTO;
 use App\Domain\Model\Group\Group;
-use App\Domain\Model\Group\GroupRepositoryInterface;
 use App\Infrastructure\Repository\GroupRepository;
 use Doctrine\ORM\EntityNotFoundException;
 
 final class GroupService
 {
     /**
-     * @var GroupRepositoryInterface
+     * @var GroupRepository
      */
     private $groupRepository;
 
@@ -22,11 +21,11 @@ final class GroupService
     private $groupAssembler;
     /**
      * GroupService constructor.
-     * @param GroupRepositoryInterface $groupRepository
+     * @param GroupRepository $groupRepository
      * @param GroupAssembler $groupAssembler
      */
     public function __construct(
-        GroupRepositoryInterface $groupRepository,
+        GroupRepository $groupRepository,
         GroupAssembler $groupAssembler
     ){
         $this->groupRepository = $groupRepository;
@@ -35,12 +34,12 @@ final class GroupService
 
     /**
      * @param int $groupId
-     * @return Group|null
+     * @return object|null
      * @throws EntityNotFoundException
      */
-    public function getGroup(int $groupId): ?Group
+    public function getGroup(int $groupId)
     {
-        $group = $this->groupRepository->findGroupById($groupId);
+        $group = $this->groupRepository->findById($groupId);
         if (!$group) {
             throw new EntityNotFoundException(sprintf('Group with id %d not found!', $groupId));
         }
@@ -52,7 +51,7 @@ final class GroupService
      */
     public function getAllGroups(): ?array
     {
-        return $this->groupRepository->findAllGroups();
+        return $this->groupRepository->findAll();
     }
 
     /**
@@ -74,7 +73,7 @@ final class GroupService
      */
     public function updateGroup(int $groupId, GroupDTO $groupDTO): ?Group
     {
-        $group = $this->groupRepository->findGroupById($groupId);
+        $group = $this->groupRepository->findById($groupId);
         if (!$group) {
             throw new EntityNotFoundException(sprintf('Group with id %d not found!', $groupId));
         }
@@ -90,7 +89,7 @@ final class GroupService
      */
     public function deleteGroup(int $groupId): void
     {
-        $group = $this->groupRepository->findGroupById($groupId);
+        $group = $this->groupRepository->findById($groupId);
         if (!$group) {
             throw new EntityNotFoundException(sprintf('Group with id %d not found!', $groupId));
         }

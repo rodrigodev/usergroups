@@ -19,8 +19,10 @@
         "symfony/form": "4.2.*",
         "symfony/framework-bundle": "4.2.*",
         "symfony/maker-bundle": "^1.11",
+        "symfony/options-resolver": "4.2.*",
         "symfony/orm-pack": "^1.0",
         "symfony/security-csrf": "4.2.*",
+        "symfony/serializer": "4.2.*",
         "symfony/twig-bundle": "4.2.*",
         "symfony/web-server-bundle": "4.2.*",
         "symfony/yaml": "4.2.*"

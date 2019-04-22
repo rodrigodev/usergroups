@@ -31,12 +31,24 @@ final class UserController extends AbstractFOSRestController
     /**
      * Creates an User resource
      * @Rest\Post("/users")
-     * @ParamConverter("UserDTO", converter="fost_rest.request_body")
+     * @ParamConverter("userDTO", class="App\Application\DTO\User\UserDTO", converter="fos_rest.request_body")
      * @param UserDTO $userDTO
      * @return View
+     * @Swagger\Parameter(
+     *     name="name",
+     *     in="query",
+     *     type="string",
+     *     description="The user name"
+     * )
+     * @Swagger\Response(
+     *     response=201,
+     *     description="Created",
+     * )
      */
     public function postUser(UserDTO $userDTO): View
     {
+        print_r($userDTO);
+        exit();
         $user = $this->userService->addUser($userDTO);
 
         // In case our POST was a success we need to return a 201 HTTP CREATED response with the created object
