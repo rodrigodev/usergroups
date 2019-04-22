@@ -25,7 +25,9 @@
         "symfony/serializer": "4.2.*",
         "symfony/twig-bundle": "4.2.*",
         "symfony/web-server-bundle": "4.2.*",
-        "symfony/yaml": "4.2.*"
+        "symfony/yaml": "4.2.*",
+        "willdurand/jsonp-callback-validator": "^1.1",
+        "willdurand/negotiation": "^2.3"
     },
     "config": {
         "preferred-install": {
