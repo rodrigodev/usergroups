@@ -1,1 +1,5 @@
 /.idea
+/var
+/vendor
+/data
+/logs

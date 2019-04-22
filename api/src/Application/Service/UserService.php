@@ -6,7 +6,6 @@ use App\Application\DTO\User\UserAssembler;
 use App\Application\DTO\User\UserDTO;
 use App\Domain\Model\User\User;
 use App\Domain\Model\User\UserRepositoryInterface;
-use App\Infrastructure\Repository\UserRepository;
 use Doctrine\ORM\EntityNotFoundException;
 
 final class UserService

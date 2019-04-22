@@ -10,6 +10,7 @@ use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Doctrine\ORM\EntityNotFoundException;
+use Swagger\Annotations as Swagger;
 
 final class UserController extends AbstractFOSRestController
 {

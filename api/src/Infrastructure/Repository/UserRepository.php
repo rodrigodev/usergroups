@@ -5,7 +5,6 @@ namespace App\Infrastructure\Repository;
 use App\Domain\Model\User\User;
 use App\Domain\Model\User\UserRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Common\Persistence\ObjectRepository;
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
  * @method User|null findOneBy(array $criteria, array $orderBy = null)
@@ -20,9 +19,15 @@ class UserRepository implements UserRepositoryInterface
      */
     private $entityManager;
 
+    /**
+     * @var ObjectRepository
+     */
+    private $repository;
+
     public function __construct(EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
+        $this->repository = $this->entityManager->getRepository(User::class);
     }
 
     public function save(User $user): void {
@@ -41,7 +46,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function findUserById(int $userId): ?User
     {
-        return $this->find($userId);
+        return $this->repository->find($userId);
     }
 
     /**
@@ -49,6 +54,6 @@ class UserRepository implements UserRepositoryInterface
      */
     public function findAllUsers(): array
     {
-        return $this->findAll();
+        return $this->repository->findAll();
     }
 }
