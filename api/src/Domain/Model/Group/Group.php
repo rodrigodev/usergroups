@@ -30,21 +30,34 @@ class Group
      */
     private $users;
 
+    /**
+     * Group constructor.
+     */
     public function __construct()
     {
         $this->users = new ArrayCollection();
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return Group
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -60,6 +73,10 @@ class Group
         return $this->users;
     }
 
+    /**
+     * @param User $user
+     * @return Group
+     */
     public function addUser(User $user): self
     {
         if (!$this->users->contains($user)) {
@@ -69,6 +86,10 @@ class Group
         return $this;
     }
 
+    /**
+     * @param User $user
+     * @return Group
+     */
     public function removeUser(User $user): self
     {
         if ($this->users->contains($user)) {

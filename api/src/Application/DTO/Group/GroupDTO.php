@@ -16,11 +16,11 @@ final class GroupDTO
 
     /**
      * GroupDTO constructor.
-     * @param string $title
+     * @param string $name
      */
-    public function __construct(string $title)
+    public function __construct(string $name)
     {
-        $this->name = $title;
+        $this->name = $name;
     }
 
     /**

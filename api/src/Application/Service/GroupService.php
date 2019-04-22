@@ -40,7 +40,7 @@ final class GroupService
      */
     public function getGroup(int $groupId): ?Group
     {
-        $group = $this->groupRepository->findById($groupId);
+        $group = $this->groupRepository->findGroupById($groupId);
         if (!$group) {
             throw new EntityNotFoundException(sprintf('Group with id %d not found!', $groupId));
         }
@@ -52,7 +52,7 @@ final class GroupService
      */
     public function getAllGroups(): ?array
     {
-        return $this->groupRepository->findAll();
+        return $this->groupRepository->findAllGroups();
     }
 
     /**
@@ -74,7 +74,7 @@ final class GroupService
      */
     public function updateGroup(int $groupId, GroupDTO $groupDTO): ?Group
     {
-        $group = $this->groupRepository->find($groupId);
+        $group = $this->groupRepository->findGroupById($groupId);
         if (!$group) {
             throw new EntityNotFoundException(sprintf('Group with id %d not found!', $groupId));
         }
@@ -90,7 +90,7 @@ final class GroupService
      */
     public function deleteGroup(int $groupId): void
     {
-        $group = $this->groupRepository->find($groupId);
+        $group = $this->groupRepository->findGroupById($groupId);
         if (!$group) {
             throw new EntityNotFoundException(sprintf('Group with id %d not found!', $groupId));
         }

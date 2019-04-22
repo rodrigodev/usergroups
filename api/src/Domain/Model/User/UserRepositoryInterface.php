@@ -13,12 +13,12 @@ interface UserRepositoryInterface
      * @param int $articleId
      * @return User
      */
-    public function findById(int $articleId): ?User;
+    public function findUserById(int $articleId): ?User;
 
     /**
      * @return array
      */
-    public function findAll(): array;
+    public function findAllUsers(): array;
 
     /**
      * @param User $article

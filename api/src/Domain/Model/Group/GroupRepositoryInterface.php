@@ -12,12 +12,12 @@ interface GroupRepositoryInterface
      * @param int $articleId
      * @return Group
      */
-    public function findById(int $articleId): ?Group;
+    public function findGroupById(int $articleId): ?Group;
 
     /**
-     * @return array
+     * @return Group[]
      */
-    public function findAll(): array;
+    public function findAllGroups(): array;
 
     /**
      * @param Group $article

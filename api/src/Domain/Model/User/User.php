@@ -29,21 +29,34 @@ class User
      */
     private $groups;
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->groups = new ArrayCollection();
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return User
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -69,6 +82,10 @@ class User
         return $this;
     }
 
+    /**
+     * @param Group $group
+     * @return User
+     */
     public function removeGroup(Group $group): self
     {
         if ($this->groups->contains($group)) {
