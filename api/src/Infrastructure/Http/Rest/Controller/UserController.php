@@ -5,12 +5,13 @@ namespace App\Infrastructure\Http\Rest\Controller;
 use App\Application\DTO\User\UserDTO;
 use App\Application\Service\UserService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Response;
+use Nelmio\ApiDocBundle\Annotation\Model;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Doctrine\ORM\EntityNotFoundException;
 use Swagger\Annotations as Swagger;
+use App\Domain\Model\User\User;
 
 final class UserController extends AbstractFOSRestController
 {
@@ -30,8 +31,7 @@ final class UserController extends AbstractFOSRestController
 
     /**
      * Creates an User resource
-     * @Rest\Post("/users")
-     * @ParamConverter("userDTO", class="App\Application\DTO\User\UserDTO", converter="fos_rest.request_body")
+     * @Rest\Post("/users", name="post_user")
      * @param UserDTO $userDTO
      * @return View
      * @Swagger\Parameter(
@@ -43,12 +43,11 @@ final class UserController extends AbstractFOSRestController
      * @Swagger\Response(
      *     response=201,
      *     description="Created",
+     *     @Model(type=User::class)
      * )
      */
     public function postUser(UserDTO $userDTO): View
     {
-        print_r($userDTO);
-        exit();
         $user = $this->userService->addUser($userDTO);
 
         // In case our POST was a success we need to return a 201 HTTP CREATED response with the created object
@@ -86,7 +85,6 @@ final class UserController extends AbstractFOSRestController
     /**
      * Replaces User resource
      * @Rest\Put("/users/{userId}")
-     * @ParamConverter("userDTO", converter="fos_rest.request_body")
      * @param int $userId
      * @param UserDTO $userDTO
      * @return View
