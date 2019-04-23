@@ -3,18 +3,13 @@
 namespace App\Infrastructure\Repository;
 
 use App\Domain\Model\Group\Group;
+use App\Domain\Model\Group\GroupRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\ORM\EntityNotFoundException;
 
-/**
- * @method Group|null find($id, $lockMode = null, $lockVersion = null)
- * @method Group|null findOneBy(array $criteria, array $orderBy = null)
- * @method Group[]    findAll()
- * @method Group[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- * @method Group|null findById($id)
- */
-class GroupRepository extends ServiceEntityRepository
+class GroupRepository extends ServiceEntityRepository implements GroupRepositoryInterface
 {
 
     /**
@@ -47,5 +42,27 @@ class GroupRepository extends ServiceEntityRepository
     public function delete(Group $group): void {
         $this->entityManager->remove($group);
         $this->entityManager->flush();
+    }
+
+    /**
+     * @param int $id
+     * @return Group
+     * @throws EntityNotFoundException
+     */
+    public function findById(int $id): Group
+    {
+        $group = $this->find($id);
+        if (!$group) {
+            throw new EntityNotFoundException('Invalid group id');
+        }
+        return $group;
+    }
+
+    /**
+     * @return array
+     */
+    public function findAll(): array
+    {
+        return parent::findAll();
     }
 }

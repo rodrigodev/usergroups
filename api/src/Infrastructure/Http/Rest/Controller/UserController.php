@@ -12,6 +12,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use Doctrine\ORM\EntityNotFoundException;
 use Swagger\Annotations as Swagger;
 use App\Domain\Model\User\User;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 final class UserController extends AbstractFOSRestController
 {
@@ -45,6 +46,7 @@ final class UserController extends AbstractFOSRestController
      *     description="Created",
      *     @Model(type=User::class)
      * )
+     * @ParamConverter("userDTO", options={"mapping": {"name": "name"}}, converter="fos_rest.request_body")
      */
     public function postUser(UserDTO $userDTO): View
     {

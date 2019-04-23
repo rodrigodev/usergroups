@@ -5,16 +5,11 @@ namespace App\Infrastructure\Repository;
 use App\Domain\Model\User\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use App\Domain\Model\User\UserRepositoryInterface;
 
-/**
- * @method User|null find($id, $lockMode = null, $lockVersion = null)
- * @method User|null findOneBy(array $criteria, array $orderBy = null)
- * @method User[]    findAll()
- * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- * @method User|null findById($id)
- */
-class UserRepository extends ServiceEntityRepository
+class UserRepository extends ServiceEntityRepository implements UserRepositoryInterface
 {
 
     /**
@@ -47,5 +42,27 @@ class UserRepository extends ServiceEntityRepository
     public function delete(User $user): void {
         $this->entityManager->remove($user);
         $this->entityManager->flush();
+    }
+
+    /**
+     * @param int $id
+     * @return User
+     * @throws EntityNotFoundException
+     */
+    public function findById(int $id): User
+    {
+        $user = $this->find($id);
+        if (!$user) {
+            throw new EntityNotFoundException('Invalid user id');
+        }
+        return $user;
+    }
+
+    /**
+     * @return array
+     */
+    public function findAll(): array
+    {
+        return parent::findAll();
     }
 }
