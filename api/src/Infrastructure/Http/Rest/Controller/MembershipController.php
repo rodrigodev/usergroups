@@ -9,6 +9,7 @@ use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Swagger\Annotations as Swagger;
+use Doctrine\ORM\EntityNotFoundException;
 
 final class MembershipController extends AbstractFOSRestController
 {
@@ -28,7 +29,7 @@ final class MembershipController extends AbstractFOSRestController
 
     /**
      * Add a User to a Group
-     * @Rest\Post("/membership/join")
+     * @Rest\Post("/membership", name="membership_create")
      *
      * @Swagger\Response(
      *     response=200,
@@ -48,8 +49,11 @@ final class MembershipController extends AbstractFOSRestController
      *     description="The group id"
      * )
      * @Swagger\Tag(name="Membership")
+     * @param Request $request
+     * @return View
+     * @throws EntityNotFoundException
      */
-    public function joinGroup(Request $request) {
+    public function joinGroup(Request $request): View {
         $userId = $request->get('user_id');
         $groupId = $request->get('group_id');
 
@@ -60,7 +64,7 @@ final class MembershipController extends AbstractFOSRestController
 
     /**
      * Remove a User from a Group
-     * @Rest\Post("/membership/quit")
+     * @Rest\Delete("/membership", name="membership_delete")
      *
      * @Swagger\Response(
      *     response=200,
@@ -80,8 +84,11 @@ final class MembershipController extends AbstractFOSRestController
      *     description="The group id"
      * )
      * @Swagger\Tag(name="Membership")
+     * @param Request $request
+     * @return View
+     * @throws EntityNotFoundException
      */
-    public function quitGroup(Request $request) {
+    public function quitGroup(Request $request): View {
         $userId = $request->get('user_id');
         $groupId = $request->get('group_id');
 

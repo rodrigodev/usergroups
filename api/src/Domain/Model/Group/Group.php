@@ -4,7 +4,6 @@ namespace App\Domain\Model\Group;
 
 use App\Domain\Model\User\User;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -66,9 +65,9 @@ class Group
     }
 
     /**
-     * @return Collection|User[]
+     * @return ArrayCollection|User[]
      */
-    public function getUsers(): Collection
+    public function getUsers(): ArrayCollection
     {
         return $this->users;
     }

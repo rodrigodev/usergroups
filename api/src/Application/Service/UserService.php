@@ -36,17 +36,12 @@ final class UserService
 
     /**
      * @param int $userId
-     * @return User|null
+     * @return User
      * @throws EntityNotFoundException
      */
-    public function getUser(int $userId): ?User
+    public function getUser(int $userId): User
     {
-        $user = $this->userRepository->findById($userId);
-        if (!$user) {
-            throw new EntityNotFoundException(sprintf('User with id %d not found!', $userId));
-        }
-
-        return $user;
+        return $this->userRepository->findById($userId);
     }
 
     /**
@@ -78,9 +73,6 @@ final class UserService
     public function updateUser(int $userId, UserDTO $userDTO): ?User
     {
         $user = $this->userRepository->findById($userId);
-        if (!$user) {
-            throw new EntityNotFoundException(sprintf('User with id %d not found!', $userId));
-        }
         $user = $this->userAssembler->updateUser($user, $userDTO);
         $this->userRepository->save($user);
 
@@ -94,10 +86,10 @@ final class UserService
     public function deleteUser(int $userId): void
     {
         $user = $this->userRepository->findById($userId);
-        if (!$user) {
-            throw new EntityNotFoundException(sprintf('User with id %d not found!', $userId));
-        }
         $this->userRepository->delete($user);
+    }
 
+    public function save(User $user): void {
+        $this->userRepository->save($user);
     }
 }

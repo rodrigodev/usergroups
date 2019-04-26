@@ -9,6 +9,13 @@ use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use App\Domain\Model\User\UserRepositoryInterface;
 
+/**
+ * Class UserRepository
+ * @package App\Infrastructure\Repository
+ *
+ * @method User|null find($id, $lockMode = null, $lockVersion = null)
+ * @method User[]    findAll()
+ */
 class UserRepository extends ServiceEntityRepository implements UserRepositoryInterface
 {
 
@@ -53,7 +60,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
     {
         $user = $this->find($id);
         if (!$user) {
-            throw new EntityNotFoundException('Invalid user id');
+            throw new EntityNotFoundException('invalid user id');
         }
         return $user;
     }
@@ -61,8 +68,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
     /**
      * @return array
      */
-    public function findAll(): array
-    {
-        return parent::findAll();
+    public function getAll(): array {
+        return $this->findAll();
     }
 }

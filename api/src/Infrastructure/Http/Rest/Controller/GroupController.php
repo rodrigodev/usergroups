@@ -3,11 +3,14 @@
 namespace App\Infrastructure\Http\Rest\Controller;
 
 use App\Application\Service\GroupService;
+use Doctrine\ORM\EntityNotFoundException;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use App\Application\DTO\Group\GroupDTO;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 final class GroupController extends AbstractFOSRestController
 {
@@ -27,13 +30,15 @@ final class GroupController extends AbstractFOSRestController
 
     /**
      * Creates an Group resource
-     * @param Request $request
+     * @param GroupDTO $groupDTO
      * @Rest\Post("/groups")
      * @return View
+     * 
+     * @ParamConverter("groupDTO", options={"mapping": {"name": "name"}}, converter="fos_rest.request_body")
      */
-    public function postGroup(Request $request): View
+    public function postGroup(GroupDTO $groupDTO): View
     {
-        $group = $this->groupService->addGroup($request->get('name'));
+        $group = $this->groupService->addGroup($groupDTO);
 
         // In case our POST was a success we need to return a 201 HTTP CREATED response with the created object
         return View::create($group, Response::HTTP_CREATED);
@@ -44,6 +49,7 @@ final class GroupController extends AbstractFOSRestController
      * @param int $groupId
      * @Rest\Get("/groups/{groupId}")
      * @return View
+     * @throws EntityNotFoundException
      */
     public function getGroup(int $groupId): View
     {
@@ -72,6 +78,7 @@ final class GroupController extends AbstractFOSRestController
      * @param Request $request
      * @Rest\Put("/groups/{groupId}")
      * @return View
+     * @throws EntityNotFoundException
      */
     public function putGroup(int $groupId, Request $request): View
     {
@@ -84,6 +91,9 @@ final class GroupController extends AbstractFOSRestController
     /**
      * Removes the Group resource
      * @Rest\Delete("/groups/{groupId}")
+     * @throws EntityNotFoundException
+     * @param int $groupId
+     * @return View
      */
     public function deleteGroup(int $groupId): View
     {

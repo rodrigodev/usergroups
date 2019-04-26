@@ -19,7 +19,7 @@ interface UserRepositoryInterface
     /**
      * @return array|User[]
      */
-    public function findAll() : array;
+    public function getAll() : array;
 
     /**
      * @param User $user

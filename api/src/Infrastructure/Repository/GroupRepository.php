@@ -9,6 +9,12 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Doctrine\ORM\EntityNotFoundException;
 
+/**
+ * Class GroupRepository
+ * @package App\Infrastructure\Repository
+ * @method Group|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Group[]    findAll()
+ */
 class GroupRepository extends ServiceEntityRepository implements GroupRepositoryInterface
 {
 
@@ -52,8 +58,8 @@ class GroupRepository extends ServiceEntityRepository implements GroupRepository
     public function findById(int $id): Group
     {
         $group = $this->find($id);
-        if (!$group) {
-            throw new EntityNotFoundException('Invalid group id');
+        if (null === $group) {
+            throw new EntityNotFoundException('invalid group id');
         }
         return $group;
     }
@@ -61,8 +67,7 @@ class GroupRepository extends ServiceEntityRepository implements GroupRepository
     /**
      * @return array
      */
-    public function findAll(): array
-    {
-        return parent::findAll();
+    public function getAll(): array {
+        return $this->findAll();
     }
 }

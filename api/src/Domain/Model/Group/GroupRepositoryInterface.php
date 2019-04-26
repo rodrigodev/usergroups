@@ -19,7 +19,7 @@ interface GroupRepositoryInterface
     /**
      * @return array|Group[]
      */
-    public function findAll() : array;
+    public function getAll() : array;
 
     /**
      * @param Group $group

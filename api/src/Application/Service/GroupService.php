@@ -8,6 +8,10 @@ use App\Domain\Model\Group\Group;
 use App\Infrastructure\Repository\GroupRepository;
 use Doctrine\ORM\EntityNotFoundException;
 
+/**
+ * Class GroupService
+ * @package App\Application\Service
+ */
 final class GroupService
 {
     /**
@@ -34,16 +38,12 @@ final class GroupService
 
     /**
      * @param int $groupId
-     * @return object|null
+     * @return Group
      * @throws EntityNotFoundException
      */
-    public function getGroup(int $groupId)
+    public function getGroup(int $groupId): Group
     {
-        $group = $this->groupRepository->findById($groupId);
-        if (!$group) {
-            throw new EntityNotFoundException(sprintf('Group with id %d not found!', $groupId));
-        }
-        return $group;
+        return $this->groupRepository->findById($groupId);
     }
 
     /**
@@ -74,9 +74,6 @@ final class GroupService
     public function updateGroup(int $groupId, GroupDTO $groupDTO): ?Group
     {
         $group = $this->groupRepository->findById($groupId);
-        if (!$group) {
-            throw new EntityNotFoundException(sprintf('Group with id %d not found!', $groupId));
-        }
         $group = $this->groupAssembler->updateGroup($group, $groupDTO);
         $this->groupRepository->save($group);
 
@@ -90,10 +87,13 @@ final class GroupService
     public function deleteGroup(int $groupId): void
     {
         $group = $this->groupRepository->findById($groupId);
-        if (!$group) {
-            throw new EntityNotFoundException(sprintf('Group with id %d not found!', $groupId));
-        }
-
         $this->groupRepository->delete($group);
+    }
+
+    /**
+     * @param Group $group
+     */
+    public function save(Group $group): void {
+        $this->groupRepository->save($group);
     }
 }
