@@ -1,10 +1,19 @@
 <?php
 
-namespace App\Service;
+namespace App\Application\Service;
+
+use Doctrine\ORM\EntityNotFoundException;
 
 class MembershipService
 {
+    /**
+     * @var UserService
+     */
     protected $userService;
+
+    /**
+     * @var GroupService
+     */
     protected $groupService;
 
     public function __construct(UserService $userService, GroupService $groupService)
@@ -13,17 +22,28 @@ class MembershipService
         $this->groupService = $groupService;
     }
 
-    public function addUserToGroup(int $userId, int $groupId)
+    /**
+     * @param int $userId
+     * @param int $groupId
+     * @throws EntityNotFoundException
+     */
+    public function addUserToGroup(int $userId, int $groupId): void
     {
         $user = $this->userService->getUser($userId);
         $group = $this->groupService->getGroup($groupId);
 
         $group->addUser($user);
 
+
         $this->groupService->save($group);
     }
 
-    public function removeUserFromGroup(int $userId, int $groupId)
+    /**
+     * @param int $userId
+     * @param int $groupId
+     * @throws EntityNotFoundException
+     */
+    public function removeUserFromGroup(int $userId, int $groupId): void
     {
         $user = $this->userService->getUser($userId);
         $group = $this->groupService->getGroup($groupId);

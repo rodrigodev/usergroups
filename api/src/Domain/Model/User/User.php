@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Entity;
+namespace App\Domain\Model\User;
 
+use App\Domain\Model\Group\Group;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
 /**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * @ORM\Entity(repositoryClass="App\Infrastructure\Repository\UserRepository")
  * @ORM\Table(name="`user`")
  */
 class User
@@ -25,25 +25,38 @@ class User
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Group", mappedBy="users")
+     * @ORM\ManyToMany(targetEntity="App\Domain\Model\Group\Group", mappedBy="users")
      */
     private $groups;
 
+    /**
+     * User constructor.
+     */
     public function __construct()
     {
         $this->groups = new ArrayCollection();
     }
 
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName(): ?string
+    /**
+     * @return string
+     */
+    public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     * @return User
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -69,6 +82,10 @@ class User
         return $this;
     }
 
+    /**
+     * @param Group $group
+     * @return User
+     */
     public function removeGroup(Group $group): self
     {
         if ($this->groups->contains($group)) {
