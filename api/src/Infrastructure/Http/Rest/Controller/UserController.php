@@ -37,16 +37,18 @@ final class UserController extends AbstractFOSRestController
      * @return View
      * @Swagger\Parameter(
      *     name="name",
-     *     in="query",
+     *     in="body",
      *     type="string",
-     *     description="The user name"
+     *     description="The user name",
+     *     @Swagger\Schema(ref=@Model(type=UserDTO::class))
      * )
      * @Swagger\Response(
      *     response=201,
      *     description="Created",
-     *     @Model(type=User::class)
+     *     @Swagger\Schema(ref=@Model(type=UserDTO::class))
      * )
-     * @ParamConverter("userDTO", options={"mapping": {"name": "name"}}, converter="fos_rest.request_body")
+     * @Swagger\Tag(name="Users")
+     *
      */
     public function postUser(UserDTO $userDTO): View
     {
