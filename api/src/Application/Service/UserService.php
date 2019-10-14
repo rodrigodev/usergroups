@@ -28,7 +28,6 @@ final class UserService
     public function __construct(
         UserRepository $userRepository,
         UserAssembler $userAssembler
-
     ){
         $this->userRepository = $userRepository;
         $this->userAssembler = $userAssembler;
