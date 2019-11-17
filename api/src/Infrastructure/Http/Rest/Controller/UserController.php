@@ -6,13 +6,15 @@ use App\Application\DTO\User\UserDTO;
 use App\Application\Service\UserService;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Doctrine\ORM\EntityNotFoundException;
 use Swagger\Annotations as Swagger;
 use App\Domain\Model\User\User;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Security\Guard\AuthenticatorInterface;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 final class UserController extends AbstractFOSRestController
 {
@@ -115,5 +117,29 @@ final class UserController extends AbstractFOSRestController
 
         // In case our DELETE was a success we need to return a 204 HTTP NO CONTENT response. The object is deleted.
         return View::create([], Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * Authenticates user
+     * @Rest\GET("/users/authenticate")
+     * @param AuthenticatorInterface $authenticator
+     * @param GuardAuthenticatorHandler $guardHandler
+     * @param Request $request
+     * @return View|Response|null
+     */
+    public function authenticate(AuthenticatorInterface $authenticator, GuardAuthenticatorHandler $guardHandler, Request $request)
+    {
+        try {
+            $user = $this->userService->getUser(1);
+        } catch (EntityNotFoundException $e) {
+            return View::create([], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        print_r($guardHandler->authenticateUserAndHandleSuccess(
+            $user,
+            $request,
+            $authenticator,
+            'main'
+        ));
     }
 }
