@@ -7,7 +7,7 @@ security:
                 property: 'username'
     encoders:
         # use your user class name here
-        App\Domain\Model\User:
+        App\Domain\Model\User\User:
             # Use native password encoder
             # This value auto-selects the best possible hashing algorithm
             # (i.e. Sodium when available).
