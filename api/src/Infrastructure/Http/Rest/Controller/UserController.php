@@ -4,6 +4,7 @@ namespace App\Infrastructure\Http\Rest\Controller;
 
 use App\Application\DTO\User\UserDTO;
 use App\Application\Service\UserService;
+use App\Security\TokenAuthenticator;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Request;
@@ -121,25 +122,28 @@ final class UserController extends AbstractFOSRestController
 
     /**
      * Authenticates user
-     * @Rest\GET("/users/authenticate")
-     * @param AuthenticatorInterface $authenticator
+     * @Rest\GET("/authenticate")
+     * @param TokenAuthenticator $authenticator
      * @param GuardAuthenticatorHandler $guardHandler
      * @param Request $request
      * @return View|Response|null
      */
-    public function authenticate(AuthenticatorInterface $authenticator, GuardAuthenticatorHandler $guardHandler, Request $request)
+    public function authenticate(TokenAuthenticator $authenticator, GuardAuthenticatorHandler $guardHandler, Request $request)
     {
+        // Manually authenticates a user with session
         try {
             $user = $this->userService->getUser(1);
         } catch (EntityNotFoundException $e) {
             return View::create([], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        print_r($guardHandler->authenticateUserAndHandleSuccess(
+        $guardHandler->authenticateUserAndHandleSuccess(
             $user,
             $request,
             $authenticator,
             'main'
-        ));
+        );
+
+        return View::create($this->getUser(), Response::HTTP_OK);
     }
 }

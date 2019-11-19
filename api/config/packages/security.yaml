@@ -3,7 +3,7 @@ security:
     providers:
         users:
             entity:
-                class: App\Domain\Model\User
+                class: App\Domain\Model\User\User
                 property: 'username'
     encoders:
         # use your user class name here
