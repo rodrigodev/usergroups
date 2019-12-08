@@ -2,7 +2,7 @@
 
 namespace App\Application\DTO\Group;
 
-use App\Domain\Model\Group\Group;
+use App\Domain\Model\Group;
 
 /**
  * Class GroupAssembler

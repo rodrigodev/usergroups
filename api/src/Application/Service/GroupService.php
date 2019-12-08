@@ -4,7 +4,7 @@ namespace App\Application\Service;
 
 use App\Application\DTO\Group\GroupAssembler;
 use App\Application\DTO\Group\GroupDTO;
-use App\Domain\Model\Group\Group;
+use App\Domain\Model\Group;
 use App\Infrastructure\Repository\GroupRepository;
 use Doctrine\ORM\EntityNotFoundException;
 

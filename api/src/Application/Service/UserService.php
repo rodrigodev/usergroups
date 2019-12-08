@@ -4,7 +4,7 @@ namespace App\Application\Service;
 
 use App\Application\DTO\User\UserAssembler;
 use App\Application\DTO\User\UserDTO;
-use App\Domain\Model\User\User;
+use App\Domain\Model\User;
 use App\Infrastructure\Repository\UserRepository;
 use Doctrine\ORM\EntityNotFoundException;
 
@@ -90,5 +90,25 @@ final class UserService
 
     public function save(User $user): void {
         $this->userRepository->save($user);
+    }
+
+    /**
+     * @param string $username
+     * @param string $password
+     * @return User
+     * @throws WrongUserOrPasswordException
+     */
+    public function auth(string $username, string $password): User
+    {
+        /**
+         * @var User $user
+         */
+        $user = $this->userRepository->findOneBy(["username" => $username]);
+
+        if (!password_verify($password . $user->getSalt(), $user->getPassword())) {
+            throw new WrongUserOrPasswordException();
+        }
+
+        return $user;
     }
 }

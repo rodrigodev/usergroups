@@ -2,7 +2,7 @@
 
 namespace App\Application\DTO\User;
 
-use App\Domain\Model\User\User;
+use App\Domain\Model\User;
 
 /**
  * Class UserAssembler
@@ -11,48 +11,51 @@ use App\Domain\Model\User\User;
 final class UserAssembler
 {
     /**
-     * @param UserDTO $UserDTO
-     * @param User|null $User
+     * @param UserDTO $userDTO
+     * @param User|null $user
      * @return User
      */
-    public function readDTO(UserDTO $UserDTO, ?User $User = null): User
+    public function readDTO(UserDTO $userDTO, ?User $user = null): User
     {
-        if (!$User) {
-            $User = new User();
+        if (!$user) {
+            $user = new User();
         }
 
-        $User->setName($UserDTO->getName());
+        $user->setName($userDTO->getName());
 
-        return $User;
+
+        return $user;
     }
 
     /**
-     * @param User $User
-     * @param UserDTO $UserDTO
+     * @param User $user
+     * @param UserDTO $userDTO
      * @return User
      */
-    public function updateUser(User $User, UserDTO $UserDTO): User
+    public function updateUser(User $user, UserDTO $userDTO): User
     {
-        return $this->readDTO($UserDTO, $User);
+        return $this->readDTO($userDTO, $user);
     }
 
     /**
-     * @param UserDTO $UserDTO
+     * @param UserDTO $userDTO
      * @return User
      */
-    public function createUser(UserDTO $UserDTO): User
+    public function createUser(UserDTO $userDTO): User
     {
-        return $this->readDTO($UserDTO);
+        return $this->readDTO($userDTO);
     }
 
     /**
-     * @param User $User
+     * @param User $user
      * @return UserDTO
      */
-    public function writeDTO(User $User): UserDTO
+    public function writeDTO(User $user): UserDTO
     {
         return new UserDTO(
-            $User->getName()
+            $user->getName(),
+            $user->getUsername(),
+            $user->getPassword()
         );
     }
 

@@ -8,6 +8,8 @@ services:
         environment:
           MYSQL_ROOT_PASSWORD: 123456
           MYSQL_DATABASE: usergroups
+        ports:
+          - "3306:3306"
     php:
         build: ./api
         volumes:

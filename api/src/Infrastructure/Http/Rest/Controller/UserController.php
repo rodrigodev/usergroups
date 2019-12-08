@@ -4,15 +4,18 @@ namespace App\Infrastructure\Http\Rest\Controller;
 
 use App\Application\DTO\User\UserDTO;
 use App\Application\Service\UserService;
+use App\Security\TokenAuthenticator;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Doctrine\ORM\EntityNotFoundException;
 use Swagger\Annotations as Swagger;
-use App\Domain\Model\User\User;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use App\Domain\Model\User;
+use Symfony\Component\Security\Guard\AuthenticatorInterface;
+use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 final class UserController extends AbstractFOSRestController
 {

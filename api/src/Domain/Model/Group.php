@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Model\Group;
+namespace App\Domain\Model;
 
-use App\Domain\Model\User\User;
+use App\Domain\Model\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,7 +26,7 @@ class Group
     private $name;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Domain\Model\User\User", inversedBy="groups")
+     * @ORM\ManyToMany(targetEntity="App\Domain\Model\User", inversedBy="groups")
      */
     private $users;
 

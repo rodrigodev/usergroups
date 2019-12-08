@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Domain\Model\Group;
+namespace App\Domain\Model;
 
 
 /**
