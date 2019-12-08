@@ -18,4 +18,4 @@ framework:
 
     templating:
         engine:
-            twig
+             twig

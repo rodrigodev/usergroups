@@ -2,12 +2,12 @@
 
 namespace App\Infrastructure\Repository;
 
-use App\Domain\Model\User\User;
+use App\Domain\Model\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use App\Domain\Model\User\UserRepositoryInterface;
+use App\Domain\Model\UserRepositoryInterface;
 
 /**
  * Class UserRepository

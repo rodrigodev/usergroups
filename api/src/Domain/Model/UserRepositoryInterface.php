@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Domain\Model\User;
+namespace App\Domain\Model;
 
 
 /**

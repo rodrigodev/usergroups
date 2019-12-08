@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Domain\Model\User;
+namespace App\Domain\Model;
 
-use App\Domain\Model\Group\Group;
+use App\Domain\Model\Group;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,12 +32,12 @@ class User implements UserInterface
     private $username;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Domain\Model\Group\Group", mappedBy="users")
+     * @ORM\ManyToMany(targetEntity="App\Domain\Model\Group", mappedBy="users")
      */
     private $groups;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="json", nullable=false)
      */
     private $roles = [];
 
@@ -45,6 +45,16 @@ class User implements UserInterface
      * @ORM\Column(type="string", unique=true, nullable=true)
      */
     private $apiToken;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $password;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $salt;
 
     /**
      * @return mixed
@@ -164,7 +174,14 @@ class User implements UserInterface
      */
     public function getPassword()
     {
-        // TODO: Implement getPassword() method.
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = password_hash($password . $this->salt, PASSWORD_ARGON2I);
+
+        return $this;
     }
 
     /**
@@ -176,7 +193,7 @@ class User implements UserInterface
      */
     public function getSalt()
     {
-        // TODO: Implement getSalt() method.
+        return $this->salt;
     }
 
     /**
