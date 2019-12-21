@@ -6,7 +6,7 @@ use App\Domain\Model\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use App\Domain\Model\UserRepositoryInterface;
 
 /**
@@ -26,10 +26,10 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
 
     /**
      * UserRepository constructor.
-     * @param RegistryInterface $registry
+     * @param ManagerRegistry $registry
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(RegistryInterface $registry, EntityManagerInterface $entityManager)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, User::class);
         $this->entityManager = $entityManager;

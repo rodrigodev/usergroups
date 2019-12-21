@@ -8,7 +8,7 @@ use App\Domain\Model\User;
  * Class UserAssembler
  * @package App\Application\DTO
  */
-final class UserAssembler
+class UserAssembler
 {
     /**
      * @param UserDTO $userDTO

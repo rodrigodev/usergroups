@@ -6,8 +6,8 @@ use App\Domain\Model\Group;
 use App\Domain\Model\GroupRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Doctrine\ORM\EntityNotFoundException;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * Class GroupRepository
@@ -25,10 +25,10 @@ class GroupRepository extends ServiceEntityRepository implements GroupRepository
 
     /**
      * GroupRepository constructor.
-     * @param RegistryInterface $registry
+     * @param ManagerRegistry $registry
      * @param EntityManagerInterface $entityManager
      */
-    public function __construct(RegistryInterface $registry, EntityManagerInterface $entityManager)
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, Group::class);
         $this->entityManager = $entityManager;
