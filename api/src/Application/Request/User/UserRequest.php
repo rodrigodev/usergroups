@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Application\DTO\User;
+namespace App\Application\Request\User;
 
 /**
- * Class UserDTO
- * @package App\Application\User\DTO
+ * Class UserRequest
+ * @package App\Application\Request\User
  */
-final class UserDTO
+final class UserRequest
 {
-    //TODO: Change implementation to json marshalling
     /**
      * @var string
      */
@@ -25,7 +24,7 @@ final class UserDTO
     private $username;
 
     /**
-     * UserDTO constructor.
+     * UserRequest constructor.
      * @param string $name
      * @param string $username
      * @param string $password

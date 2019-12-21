@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Application\DTO\Group;
+namespace App\Application\Request\Group;
 
 /**
- * Class GroupDTO
- * @package App\Application\Group\DTO
+ * Class GroupRequest
+ * @package App\Application\Request\Group
  */
-final class GroupDTO
+final class GroupRequest
 {
 
     /**
@@ -15,7 +15,7 @@ final class GroupDTO
     private $name;
 
     /**
-     * GroupDTO constructor.
+     * GroupRequest constructor.
      * @param string $name
      */
     public function __construct(string $name)

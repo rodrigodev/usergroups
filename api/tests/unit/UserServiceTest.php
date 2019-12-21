@@ -4,8 +4,8 @@
 namespace App\Tests\Unit;
 
 
-use App\Application\DTO\User\UserAssembler;
-use App\Application\DTO\User\UserDTO;
+use App\Application\Request\User\UserRequestHandler;
+use App\Application\Request\User\UserRequest;
 use App\Application\Service\UserService;
 use App\Domain\Model\User;
 use App\Domain\Model\UserRepositoryInterface;
@@ -24,7 +24,7 @@ final class UserServiceTest extends TestCase
         $user = new User();
         $user->setName('Dave');
 
-        $userData = new UserDTO(
+        $userData = new UserRequest(
             $name,
             $username,
             $password
@@ -37,7 +37,7 @@ final class UserServiceTest extends TestCase
 
         //$userAssembler
 
-        $userService = new UserService($userRepository, new UserAssembler());
+        $userService = new UserService($userRepository, new UserRequestHandler());
         $resultUser = $userService->addUser($userData);
 
         $this->assertEquals('Dave', $resultUser->getName());

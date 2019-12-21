@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Application\DTO\User;
+namespace App\Application\Request\User;
 
 use App\Domain\Model\User;
 
 /**
  * Class UserAssembler
- * @package App\Application\DTO
+ * @package App\Application\Request
  */
-class UserAssembler
+class UserRequestHandler
 {
     /**
-     * @param UserDTO $userDTO
+     * @param UserRequest $userDTO
      * @param User|null $user
      * @return User
      */
-    public function readDTO(UserDTO $userDTO, ?User $user = null): User
+    public function readDTO(UserRequest $userDTO, ?User $user = null): User
     {
         if (!$user) {
             $user = new User();
@@ -29,30 +29,30 @@ class UserAssembler
 
     /**
      * @param User $user
-     * @param UserDTO $userDTO
+     * @param UserRequest $userDTO
      * @return User
      */
-    public function updateUser(User $user, UserDTO $userDTO): User
+    public function updateUser(User $user, UserRequest $userDTO): User
     {
         return $this->readDTO($userDTO, $user);
     }
 
     /**
-     * @param UserDTO $userDTO
+     * @param UserRequest $userDTO
      * @return User
      */
-    public function createUser(UserDTO $userDTO): User
+    public function createUser(UserRequest $userDTO): User
     {
         return $this->readDTO($userDTO);
     }
 
     /**
      * @param User $user
-     * @return UserDTO
+     * @return UserRequest
      */
-    public function writeDTO(User $user): UserDTO
+    public function writeDTO(User $user): UserRequest
     {
-        return new UserDTO(
+        return new UserRequest(
             $user->getName(),
             $user->getUsername(),
             $user->getPassword()

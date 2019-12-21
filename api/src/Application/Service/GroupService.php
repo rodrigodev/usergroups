@@ -2,8 +2,8 @@
 
 namespace App\Application\Service;
 
-use App\Application\DTO\Group\GroupAssembler;
-use App\Application\DTO\Group\GroupDTO;
+use App\Application\Request\Group\GroupRequestHandler;
+use App\Application\Request\Group\GroupRequest;
 use App\Domain\Model\Group;
 use App\Infrastructure\Repository\GroupRepository;
 use Doctrine\ORM\EntityNotFoundException;
@@ -20,17 +20,17 @@ final class GroupService
     private $groupRepository;
 
     /**
-     * @var GroupAssembler
+     * @var GroupRequestHandler
      */
     private $groupAssembler;
     /**
      * GroupService constructor.
      * @param GroupRepository $groupRepository
-     * @param GroupAssembler $groupAssembler
+     * @param GroupRequestHandler $groupAssembler
      */
     public function __construct(
         GroupRepository $groupRepository,
-        GroupAssembler $groupAssembler
+        GroupRequestHandler $groupAssembler
     ){
         $this->groupRepository = $groupRepository;
         $this->groupAssembler = $groupAssembler;
@@ -55,10 +55,10 @@ final class GroupService
     }
 
     /**
-     * @param GroupDTO $groupDTO
+     * @param GroupRequest $groupDTO
      * @return Group
      */
-    public function addGroup(GroupDTO $groupDTO): Group
+    public function addGroup(GroupRequest $groupDTO): Group
     {
         $group = $this->groupAssembler->createGroup($groupDTO);
         $this->groupRepository->save($group);
@@ -67,11 +67,11 @@ final class GroupService
 
     /**
      * @param int $groupId
-     * @param GroupDTO $groupDTO
+     * @param GroupRequest $groupDTO
      * @return Group|null
      * @throws EntityNotFoundException
      */
-    public function updateGroup(int $groupId, GroupDTO $groupDTO): ?Group
+    public function updateGroup(int $groupId, GroupRequest $groupDTO): ?Group
     {
         $group = $this->groupRepository->findById($groupId);
         $group = $this->groupAssembler->updateGroup($group, $groupDTO);

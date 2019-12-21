@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\Http\Rest\Controller;
 
-use App\Application\DTO\User\UserDTO;
+use App\Application\Request\User\UserRequest;
 use App\Application\Service\UserService;
 use App\Security\TokenAuthenticator;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -36,26 +36,25 @@ final class UserController extends AbstractFOSRestController
     /**
      * Creates an User resource
      * @Rest\Post("/users", name="post_user")
-     * @param UserDTO $userDTO
+     * @param UserRequest $userRequest
      * @return View
      * @Swagger\Parameter(
      *     name="name",
      *     in="body",
      *     type="string",
      *     description="The user name",
-     *     @Swagger\Schema(ref=@Model(type=UserDTO::class))
+     *     @Swagger\Schema(ref=@Model(type=UserRequest::class))
      * )
      * @Swagger\Response(
      *     response=201,
-     *     description="Created",
-     *     @Swagger\Schema(ref=@Model(type=UserDTO::class))
+     *     description="Created"
      * )
      * @Swagger\Tag(name="Users")
      *
      */
-    public function postUser(UserDTO $userDTO): View
+    public function postUser(UserRequest $userRequest): View
     {
-        $user = $this->userService->addUser($userDTO);
+        $user = $this->userService->addUser($userRequest);
 
         // In case our POST was a success we need to return a 201 HTTP CREATED response with the created object
         return View::create($user, Response::HTTP_CREATED);
@@ -67,6 +66,12 @@ final class UserController extends AbstractFOSRestController
      * @param int $userId
      * @return View
      * @throws EntityNotFoundException
+     *
+     * @Swagger\Response(
+     *     response=200,
+     *     description="Gets a user by id"
+     * )
+     * @Swagger\Tag(name="Users")
      */
     public function getUserById(int $userId): View
     {
@@ -79,8 +84,12 @@ final class UserController extends AbstractFOSRestController
     /**
      * Retrieves a collection of User resource
      * @Rest\Get("/users")
+     * @Swagger\Response(
+     *     response=200,
+     *     description="Gets all users"
+     * )
+     * @Swagger\Tag(name="Users")
      */
-
     public function getUsers(): View
     {
         $users = $this->userService->getAllUsers();
@@ -93,13 +102,18 @@ final class UserController extends AbstractFOSRestController
      * Replaces User resource
      * @Rest\Put("/users/{userId}")
      * @param int $userId
-     * @param UserDTO $userDTO
+     * @param UserRequest $userRequest
      * @return View
      * @throws EntityNotFoundException
+     * @Swagger\Response(
+     *     response=200,
+     *     description="Replaces a user resource"
+     * )
+     * @Swagger\Tag(name="Users")
      */
-    public function putUser(int $userId, UserDTO $userDTO): View
+    public function putUser(int $userId, UserRequest $userRequest): View
     {
-        $user = $this->userService->updateUser($userId, $userDTO);
+        $user = $this->userService->updateUser($userId, $userRequest);
 
         // In case our PUT was a success we need to return a 200 HTTP OK response with the object as a result of PUT
         return View::create($user, Response::HTTP_OK);
@@ -111,6 +125,11 @@ final class UserController extends AbstractFOSRestController
      * @param int $userId
      * @return View
      * @throws EntityNotFoundException
+     * @Swagger\Response(
+     *     response=200,
+     *     description="Remove a user by id"
+     * )
+     * @Swagger\Tag(name="Users")
      */
     public function deleteUser(int $userId): View
     {

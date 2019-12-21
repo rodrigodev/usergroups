@@ -9,8 +9,10 @@ use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use App\Application\DTO\Group\GroupDTO;
+use Swagger\Annotations as Swagger;
+use App\Application\Request\Group\GroupRequest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Nelmio\ApiDocBundle\Annotation\Model;
 
 final class GroupController extends AbstractFOSRestController
 {
@@ -30,15 +32,26 @@ final class GroupController extends AbstractFOSRestController
 
     /**
      * Creates an Group resource
-     * @param GroupDTO $groupDTO
-     * @Rest\Post("/groups")
+     * @param GroupRequest $groupRequest
+     * @Rest\Post("/groups", name="create_group")
      * @return View
-     * 
-     * @ParamConverter("groupDTO", options={"mapping": {"name": "name"}}, converter="fos_rest.request_body")
+     * @Swagger\Parameter(
+     *     name="create group request",
+     *     in="body",
+     *     type="string",
+     *     description="A request to create a group",
+     *     @Swagger\Schema(ref=@Model(type=GroupRequest::class))
+     * )
+     * @Swagger\Response(
+     *     response=201,
+     *     description="Created",
+     * )
+     * @Swagger\Tag(name="Groups")
+     *
      */
-    public function postGroup(GroupDTO $groupDTO): View
+    public function postGroup(GroupRequest $groupRequest): View
     {
-        $group = $this->groupService->addGroup($groupDTO);
+        $group = $this->groupService->addGroup($groupRequest);
 
         // In case our POST was a success we need to return a 201 HTTP CREATED response with the created object
         return View::create($group, Response::HTTP_CREATED);
@@ -50,6 +63,11 @@ final class GroupController extends AbstractFOSRestController
      * @Rest\Get("/groups/{groupId}")
      * @return View
      * @throws EntityNotFoundException
+     * @Swagger\Response(
+     *     response=200,
+     *     description="Gets a group by id"
+     * )
+     * @Swagger\Tag(name="Groups")
      */
     public function getGroup(int $groupId): View
     {
@@ -63,6 +81,11 @@ final class GroupController extends AbstractFOSRestController
      * Retrieves a collection of Group resource
      * @Rest\Get("/groups")
      * @return View
+     * @Swagger\Response(
+     *     response=200,
+     *     description="Gets all groups"
+     * )
+     * @Swagger\Tag(name="Groups")
      */
     public function getGroups(): View
     {
@@ -79,6 +102,11 @@ final class GroupController extends AbstractFOSRestController
      * @Rest\Put("/groups/{groupId}")
      * @return View
      * @throws EntityNotFoundException
+     * @Swagger\Response(
+     *     response=200,
+     *     description="Replaces a group resource"
+     * )
+     * @Swagger\Tag(name="Groups")
      */
     public function putGroup(int $groupId, Request $request): View
     {
@@ -94,6 +122,11 @@ final class GroupController extends AbstractFOSRestController
      * @throws EntityNotFoundException
      * @param int $groupId
      * @return View
+     * @Swagger\Response(
+     *     response=200,
+     *     description="Removes a group by id"
+     * )
+     * @Swagger\Tag(name="Groups")
      */
     public function deleteGroup(int $groupId): View
     {

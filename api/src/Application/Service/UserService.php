@@ -2,8 +2,8 @@
 
 namespace App\Application\Service;
 
-use App\Application\DTO\User\UserAssembler;
-use App\Application\DTO\User\UserDTO;
+use App\Application\Request\User\UserRequestHandler;
+use App\Application\Request\User\UserRequest;
 use App\Domain\Model\User;
 use App\Infrastructure\Repository\UserRepository;
 use Doctrine\ORM\EntityNotFoundException;
@@ -16,18 +16,18 @@ final class UserService
     private $userRepository;
 
     /**
-     * @var UserAssembler
+     * @var UserRequestHandler
      */
     private $userAssembler;
 
     /**
      * UserService constructor.
      * @param UserRepository $userRepository
-     * @param UserAssembler $userAssembler
+     * @param UserRequestHandler $userAssembler
      */
     public function __construct(
         UserRepository $userRepository,
-        UserAssembler $userAssembler
+        UserRequestHandler $userAssembler
     ){
         $this->userRepository = $userRepository;
         $this->userAssembler = $userAssembler;
@@ -52,10 +52,10 @@ final class UserService
     }
 
     /**
-     * @param UserDTO $userDTO
+     * @param UserRequest $userDTO
      * @return User
      */
-    public function addUser(UserDTO $userDTO): User
+    public function addUser(UserRequest $userDTO): User
     {
         $user = $this->userAssembler->createUser($userDTO);
         $this->userRepository->save($user);
@@ -65,11 +65,11 @@ final class UserService
 
     /**
      * @param int $userId
-     * @param UserDTO $userDTO
+     * @param UserRequest $userDTO
      * @return User|null
      * @throws EntityNotFoundException
      */
-    public function updateUser(int $userId, UserDTO $userDTO): ?User
+    public function updateUser(int $userId, UserRequest $userDTO): ?User
     {
         $user = $this->userRepository->findById($userId);
         $user = $this->userAssembler->updateUser($user, $userDTO);
