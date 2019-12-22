@@ -11,4 +11,4 @@ fixtures:
 	@bin/console doctrine:fixtures:load --quiet
 
 test:
-	@php ./bin/phpunit
+	@php ./bin/phpunit --verbose

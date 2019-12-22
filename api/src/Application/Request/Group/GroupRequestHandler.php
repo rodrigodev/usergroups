@@ -16,7 +16,7 @@ final class GroupRequestHandler
      * @param Group|null $group
      * @return Group
      */
-    public function readDTO(GroupRequest $groupRequest, ?Group $group = null): Group
+    public function fromRequest(GroupRequest $groupRequest, ?Group $group = null): Group
     {
         if (!$group) {
             $group = new Group();
@@ -34,7 +34,7 @@ final class GroupRequestHandler
      */
     public function updateGroup(Group $group, GroupRequest $groupRequest): Group
     {
-        return $this->readDTO($groupRequest, $group);
+        return $this->fromRequest($groupRequest, $group);
     }
 
     /**
@@ -43,14 +43,14 @@ final class GroupRequestHandler
      */
     public function createGroup(GroupRequest $groupRequest): Group
     {
-        return $this->readDTO($groupRequest);
+        return $this->fromRequest($groupRequest);
     }
 
     /**
      * @param Group $group
      * @return GroupRequest
      */
-    public function writeDTO(Group $group): GroupRequest
+    public function toRequest(Group $group): GroupRequest
     {
         return new GroupRequest(
             $group->getName()

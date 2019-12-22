@@ -9,9 +9,9 @@ use App\Application\Request\User\UserRequest;
 use App\Application\Service\UserService;
 use App\Domain\Model\User;
 use App\Domain\Model\UserRepositoryInterface;
+use App\Infrastructure\Http\Rest\Controller\UserController;
 use App\Infrastructure\Repository\UserRepository;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 final class UserServiceTest extends TestCase
@@ -22,7 +22,9 @@ final class UserServiceTest extends TestCase
         $password = '123456';
 
         $user = new User();
-        $user->setName('Dave');
+        $user->setName($name);
+        $user->setPassword($password);
+        $user->setUsername($username);
 
         $userData = new UserRequest(
             $name,
@@ -30,16 +32,17 @@ final class UserServiceTest extends TestCase
             $password
         );
 
+        /**
+         * @var UserRepositoryInterface $userRepository
+         */
         $userRepository = $this->createMock(UserRepository::class);
         $userRepository->expects($this->once())
-            ->method('save')
-            ->with($user);
-
-        //$userAssembler
+            ->method('save');
 
         $userService = new UserService($userRepository, new UserRequestHandler());
         $resultUser = $userService->addUser($userData);
 
         $this->assertEquals('Dave', $resultUser->getName());
+        $this->assertEquals('dave_mustaine', $resultUser->getUsername());
     }
 }

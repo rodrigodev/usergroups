@@ -22,18 +22,18 @@ final class GroupService
     /**
      * @var GroupRequestHandler
      */
-    private $groupAssembler;
+    private $groupRequestHandler;
     /**
      * GroupService constructor.
      * @param GroupRepository $groupRepository
-     * @param GroupRequestHandler $groupAssembler
+     * @param GroupRequestHandler $groupRequestHandler
      */
     public function __construct(
         GroupRepository $groupRepository,
-        GroupRequestHandler $groupAssembler
+        GroupRequestHandler $groupRequestHandler
     ){
         $this->groupRepository = $groupRepository;
-        $this->groupAssembler = $groupAssembler;
+        $this->groupRequestHandler = $groupRequestHandler;
     }
 
     /**
@@ -55,26 +55,26 @@ final class GroupService
     }
 
     /**
-     * @param GroupRequest $groupDTO
+     * @param GroupRequest $groupRequest
      * @return Group
      */
-    public function addGroup(GroupRequest $groupDTO): Group
+    public function addGroup(GroupRequest $groupRequest): Group
     {
-        $group = $this->groupAssembler->createGroup($groupDTO);
+        $group = $this->groupRequestHandler->createGroup($groupRequest);
         $this->groupRepository->save($group);
         return $group;
     }
 
     /**
      * @param int $groupId
-     * @param GroupRequest $groupDTO
+     * @param GroupRequest $groupRequest
      * @return Group|null
      * @throws EntityNotFoundException
      */
-    public function updateGroup(int $groupId, GroupRequest $groupDTO): ?Group
+    public function updateGroup(int $groupId, GroupRequest $groupRequest): ?Group
     {
         $group = $this->groupRepository->findById($groupId);
-        $group = $this->groupAssembler->updateGroup($group, $groupDTO);
+        $group = $this->groupRequestHandler->updateGroup($group, $groupRequest);
         $this->groupRepository->save($group);
 
         return $group;

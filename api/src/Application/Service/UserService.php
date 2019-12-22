@@ -5,6 +5,7 @@ namespace App\Application\Service;
 use App\Application\Request\User\UserRequestHandler;
 use App\Application\Request\User\UserRequest;
 use App\Domain\Model\User;
+use App\Domain\Model\UserRepositoryInterface;
 use App\Infrastructure\Repository\UserRepository;
 use Doctrine\ORM\EntityNotFoundException;
 
@@ -18,19 +19,19 @@ final class UserService
     /**
      * @var UserRequestHandler
      */
-    private $userAssembler;
+    private $userRequestHandler;
 
     /**
      * UserService constructor.
-     * @param UserRepository $userRepository
-     * @param UserRequestHandler $userAssembler
+     * @param UserRepositoryInterface $userRepository
+     * @param UserRequestHandler $userRequestHandler
      */
     public function __construct(
-        UserRepository $userRepository,
-        UserRequestHandler $userAssembler
+        UserRepositoryInterface $userRepository,
+        UserRequestHandler $userRequestHandler
     ){
         $this->userRepository = $userRepository;
-        $this->userAssembler = $userAssembler;
+        $this->userRequestHandler = $userRequestHandler;
     }
 
     /**
@@ -52,12 +53,12 @@ final class UserService
     }
 
     /**
-     * @param UserRequest $userDTO
+     * @param UserRequest $userRequest
      * @return User
      */
-    public function addUser(UserRequest $userDTO): User
+    public function addUser(UserRequest $userRequest): User
     {
-        $user = $this->userAssembler->createUser($userDTO);
+        $user = $this->userRequestHandler->createUser($userRequest);
         $this->userRepository->save($user);
 
         return $user;
@@ -65,14 +66,14 @@ final class UserService
 
     /**
      * @param int $userId
-     * @param UserRequest $userDTO
+     * @param UserRequest $userRequest
      * @return User|null
      * @throws EntityNotFoundException
      */
-    public function updateUser(int $userId, UserRequest $userDTO): ?User
+    public function updateUser(int $userId, UserRequest $userRequest): ?User
     {
         $user = $this->userRepository->findById($userId);
-        $user = $this->userAssembler->updateUser($user, $userDTO);
+        $user = $this->userRequestHandler->updateUser($user, $userRequest);
         $this->userRepository->save($user);
 
         return $user;
