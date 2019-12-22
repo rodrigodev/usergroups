@@ -8,7 +8,6 @@ namespace App\Application\Request\Group;
  */
 final class GroupRequest
 {
-
     /**
      * @var string
      */

@@ -41,7 +41,6 @@ final class UserController extends AbstractFOSRestController
      * @Swagger\Parameter(
      *     name="name",
      *     in="body",
-     *     type="string",
      *     description="The user name",
      *     @Swagger\Schema(ref=@Model(type=UserRequest::class))
      * )
@@ -61,7 +60,7 @@ final class UserController extends AbstractFOSRestController
     }
 
     /**
-     * Retrieves an User resource
+     * Retrieves a User resource
      * @Rest\Get("/users/{userId}")
      * @param int $userId
      * @return View
@@ -120,7 +119,7 @@ final class UserController extends AbstractFOSRestController
     }
 
     /**
-     * Removes the User resource
+     * Removes a User resource
      * @Rest\Delete("/users/{userId}")
      * @param int $userId
      * @return View

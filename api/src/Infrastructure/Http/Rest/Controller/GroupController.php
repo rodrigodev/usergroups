@@ -38,7 +38,6 @@ final class GroupController extends AbstractFOSRestController
      * @Swagger\Parameter(
      *     name="create group request",
      *     in="body",
-     *     type="string",
      *     description="A request to create a group",
      *     @Swagger\Schema(ref=@Model(type=GroupRequest::class))
      * )
@@ -58,7 +57,7 @@ final class GroupController extends AbstractFOSRestController
     }
 
     /**
-     * Retrieves an Group resource
+     * Retrieves a Group resource
      * @param int $groupId
      * @Rest\Get("/groups/{groupId}")
      * @return View
@@ -117,7 +116,7 @@ final class GroupController extends AbstractFOSRestController
     }
 
     /**
-     * Removes the Group resource
+     * Removes a Group resource
      * @Rest\Delete("/groups/{groupId}")
      * @throws EntityNotFoundException
      * @param int $groupId
