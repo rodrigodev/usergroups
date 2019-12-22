@@ -39,7 +39,7 @@ final class SecurityController extends AbstractController
     }
 
     /**
-     * Add a User to a Group
+     * Authenticates a user and also return a token
      * @Rest\Post("/authenticate", name="security_login")
      *
      * @Swagger\Response(

@@ -34,7 +34,7 @@ final class UserController extends AbstractFOSRestController
     }
 
     /**
-     * Creates an User resource
+     * Creates a User resource
      * @Rest\Post("/users", name="post_user")
      * @param UserRequest $userRequest
      * @return View

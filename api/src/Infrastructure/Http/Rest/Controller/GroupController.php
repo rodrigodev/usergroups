@@ -31,7 +31,7 @@ final class GroupController extends AbstractFOSRestController
     }
 
     /**
-     * Creates an Group resource
+     * Creates a Group resource
      * @param GroupRequest $groupRequest
      * @Rest\Post("/groups", name="create_group")
      * @return View

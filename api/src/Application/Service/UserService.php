@@ -109,6 +109,20 @@ final class UserService
             throw new WrongUserOrPasswordException();
         }
 
+        return $this->refreshToken($user);
+    }
+
+    /**
+     * @param User $user
+     * @return User
+     */
+    private function refreshToken(User $user): User
+    {
+        $token = bin2hex(openssl_random_pseudo_bytes(16));
+
+        $user->setApiToken($token);
+        $this->userRepository->save($user);
+
         return $user;
     }
 }
