@@ -2,17 +2,11 @@
 
 ### Installation
 
-`$ docker-compose build`
+`$ make build`
 
 ### Running
 
-`$ docker-compose up -d`
-
-### Setup
-
-`$ docker exec -it {container_id} make install`
-
-`$ docker exec -it {container_id} make setup`
+`$ make run`
 
 ### Api Documentation
 
