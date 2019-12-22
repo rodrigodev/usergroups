@@ -1,5 +1,5 @@
 .SILENT:
-.PHONY: install setup
+.PHONY: install setup test
 
 install:
 	@composer install

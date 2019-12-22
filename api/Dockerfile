@@ -24,3 +24,6 @@ RUN "date"
 RUN docker-php-ext-install pdo pdo_mysql zip
 
 WORKDIR /var/www
+
+ENTRYPOINT ["/var/www/startup_script.sh"]
+CMD ["php-fpm"]

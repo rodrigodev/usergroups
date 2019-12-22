@@ -25,5 +25,3 @@ services:
           - php
         volumes:
           - ./logs/nginx/:/var/log/nginx
-        depends_on:
-          - php
