@@ -8,7 +8,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityNotFoundException;
 use Doctrine\Persistence\ManagerRegistry;
-use App\Doctrine\UuidEncoder;
 
 /**
  * Class HorseRepository
@@ -23,11 +22,6 @@ class HorseRepository extends ServiceEntityRepository implements HorseRepository
      * @var EntityManagerInterface
      */
     private $entityManager;
-
-    /**
-     * @var UuidEncoder
-     */
-    private $uuidEncoder;
 
     /**
      * HorseRepository constructor.
@@ -56,37 +50,22 @@ class HorseRepository extends ServiceEntityRepository implements HorseRepository
         $this->entityManager->flush();
     }
 
-
     /**
-     * @param int $id
+     * @param string $uuid
      * @return Horse
      * @throws EntityNotFoundException
      */
-    public function findById(int $id): Horse
-    {
-        $group = $this->find($id);
-        if (null === $group) {
-            throw new EntityNotFoundException('invalid group id');
-        }
-        return $group;
-    }
-
-    /**
-     * @param string $encodedUuid
-     * @return Horse
-     * @throws EntityNotFoundException
-     */
-    public function findOneByEncodedUuid(string $encodedUuid): Horse
+    public function findOneByUuid(string $uuid): Horse
     {
         /**
          * @var Horse $horse
          */
         $horse = $this->findOneBy([
-            'uuid' => $this->uuidEncoder->decode($encodedUuid)
+            'uuid' => $uuid
         ]);
 
         if (null === $horse) {
-            throw new EntityNotFoundException('invalid horse id');
+            throw new EntityNotFoundException('invalid horse uuid');
         }
 
         return $horse;

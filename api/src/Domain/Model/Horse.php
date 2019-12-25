@@ -12,17 +12,10 @@ use Ramsey\Uuid\UuidInterface;
 class Horse
 {
     /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
      * The internal primary identity key.
      *
      * @var UuidInterface|null
-     *
+     * @ORM\Id()
      * @ORM\Column(type="uuid", unique=true)
      */
     private $uuid;
@@ -76,14 +69,6 @@ class Horse
     public function setPicture($picture): void
     {
         $this->picture = $picture;
-    }
-
-    /**
-     * @return int|null
-     */
-    public function getId(): ?int
-    {
-        return $this->id;
     }
 
     /**

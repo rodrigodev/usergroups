@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Http\Rest\Controller;
 
+use App\Application\Exceptions\ValidationException;
 use App\Application\Service\HorseService;
 use Doctrine\ORM\EntityNotFoundException;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -14,6 +15,7 @@ use App\Application\Request\Horse\HorseRequest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class HorseController extends AbstractFOSRestController
 {
@@ -33,9 +35,11 @@ final class HorseController extends AbstractFOSRestController
 
     /**
      * Creates a Horse resource
-     * @param HorseRequest $horseRequest
-     * @Rest\Post("/horses", name="create_horse")
+     * @param Request $request
+     * @param ValidatorInterface $validator
      * @return View
+     * @throws ValidationException
+     * @Rest\Post("/horses", name="create_horse")
      * @Swagger\Parameter(
      *     name="create horse request",
      *     in="body",
@@ -47,11 +51,10 @@ final class HorseController extends AbstractFOSRestController
      *     description="Created",
      * )
      * @Swagger\Tag(name="Horses")
-     *
      */
-    public function postHorse(HorseRequest $horseRequest): View
+    public function postHorse(Request $request, ValidatorInterface $validator): View
     {
-        $horse = $this->horseService->addHorse($horseRequest);
+        $horse = $this->horseService->addHorse(HorseRequest::createFromRequest($request, $validator));
 
         // In case our POST was a success we need to return a 201 HTTP CREATED response with the created object
         return View::create($horse, Response::HTTP_CREATED);
@@ -59,19 +62,19 @@ final class HorseController extends AbstractFOSRestController
 
     /**
      * Retrieves a Horse resource
-     * @param string $horseId
-     * @Rest\Get("/horses/{horseId}")
+     * @param string $horseUuid
+     * @Rest\Get("/horses/{horseUuid}")
      * @return View
      * @throws EntityNotFoundException
      * @Swagger\Response(
      *     response=200,
-     *     description="Gets a horse by id"
+     *     description="Gets a horse by uuid"
      * )
      * @Swagger\Tag(name="Horses")
      */
-    public function getHorse(string $horseId): View
+    public function getHorse(string $horseUuid): View
     {
-        $horse = $this->horseService->getHorse($horseId);
+            $horse = $this->horseService->getHorse($horseUuid);
 
         // In case our GET was a success we need to return a 200 HTTP OK response with the request object
         return View::create($horse, Response::HTTP_OK);
@@ -97,20 +100,28 @@ final class HorseController extends AbstractFOSRestController
 
     /**
      * Replaces Horse resource
-     * @param string $horseId
+     * @param string $horseUuid
      * @param Request $request
-     * @Rest\Put("/horses/{horseId}")
+     * @param ValidatorInterface $validator
      * @return View
-     * @throws EntityNotFoundException
+     * @throws ValidationException
+     * @throws \Exception
+     * @Rest\Put("/horses/{horseUuid}")
+     * @Swagger\Parameter(
+     *     name="name",
+     *     in="body",
+     *     description="The horse data",
+     *     @Swagger\Schema(ref=@Model(type=HorseRequest::class))
+     * )
      * @Swagger\Response(
      *     response=200,
      *     description="Replaces a horse resource"
      * )
      * @Swagger\Tag(name="Horses")
      */
-    public function putHorse(string $horseId, Request $request): View
+    public function putHorse(string $horseUuid, Request $request, ValidatorInterface $validator): View
     {
-        $horse = $this->horseService->updateHorse($horseId, $request->get('name'));
+        $horse = $this->horseService->updateHorse($horseUuid, HorseRequest::createFromRequest($request, $validator));
 
         // In case our PUT was a success we need to return a 200 HTTP OK response with the object as a result of PUT
         return View::create($horse, Response::HTTP_OK);
@@ -118,9 +129,9 @@ final class HorseController extends AbstractFOSRestController
 
     /**
      * Removes a Horse resource
-     * @Rest\Delete("/horses/{horseId}")
+     * @Rest\Delete("/horses/{horseUuid}")
      * @throws EntityNotFoundException
-     * @param string $horseId
+     * @param string $horseUuid
      * @return View
      * @Swagger\Response(
      *     response=200,
@@ -128,9 +139,9 @@ final class HorseController extends AbstractFOSRestController
      * )
      * @Swagger\Tag(name="Horses")
      */
-    public function deleteHorse(string $horseId): View
+    public function deleteHorse(string $horseUuid): View
     {
-        $this->horseService->deleteHorse($horseId);
+        $this->horseService->deleteHorse($horseUuid);
 
         // In case our DELETE was a success we need to return a 204 HTTP NO CONTENT response. The object is deleted.
         return View::create([], Response::HTTP_NO_CONTENT);

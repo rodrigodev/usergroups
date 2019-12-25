@@ -2,11 +2,16 @@
 
 namespace App\Application\Request\User;
 
+use Symfony\Component\HttpFoundation\Request;
+use App\Application\Exceptions\ValidationException;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 /**
  * Class UserRequest
  * @package App\Application\Request\User
  */
-final class UserRequest
+class UserRequest
 {
     /**
      * @var string
@@ -15,11 +20,13 @@ final class UserRequest
 
     /**
      * @var string
+     * @Assert\NotBlank
      */
     private $password;
 
     /**
      * @var string
+     * @Assert\NotBlank
      */
     private $username;
 
@@ -34,6 +41,29 @@ final class UserRequest
         $this->name = $name;
         $this->username = $username;
         $this->password = $password;
+    }
+
+    /**
+     * @param Request $request
+     * @param ValidatorInterface $validator
+     * @return UserRequest
+     * @throws ValidationException
+     */
+    public static function createFromRequest(Request $request, ValidatorInterface $validator): UserRequest
+    {
+        $userRequest = new self(
+            $request->request->get('name'),
+            $request->request->get('username'),
+            $request->request->get('password')
+        );
+
+        $errors = $validator->validate($userRequest);
+
+        if (count($errors) > 0) {
+            throw new ValidationException((string) $errors);
+        }
+
+        return $userRequest;
     }
 
     /**

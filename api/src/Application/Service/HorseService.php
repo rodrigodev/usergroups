@@ -7,7 +7,6 @@ use App\Application\Request\Horse\HorseRequest;
 use App\Domain\Model\Horse;
 use App\Infrastructure\Repository\HorseRepository;
 use Doctrine\ORM\EntityNotFoundException;
-use Ramsey\Uuid\UuidInterface;
 
 /**
  * Class HorseService
@@ -44,7 +43,7 @@ final class HorseService
      */
     public function getHorse(string $horseUuid): Horse
     {
-        return $this->horseRepository->findOneByEncodedUuid($horseUuid);
+        return $this->horseRepository->findOneByUuid($horseUuid);
     }
 
     /**
@@ -58,6 +57,7 @@ final class HorseService
     /**
      * @param HorseRequest $horseRequest
      * @return Horse
+     * @throws \Exception
      */
     public function addHorse(HorseRequest $horseRequest): Horse
     {
@@ -70,12 +70,11 @@ final class HorseService
      * @param string $horseUuid
      * @param HorseRequest $horseRequest
      * @return Horse|null
-     * @throws EntityNotFoundException
      * @throws \Exception
      */
     public function updateHorse(string $horseUuid, HorseRequest $horseRequest): ?Horse
     {
-        $horse = $this->horseRepository->findOneByEncodedUuid($horseUuid);
+        $horse = $this->horseRepository->findOneByUuid($horseUuid);
         $horse = $this->horseRequestHandler->updateHorse($horse, $horseRequest);
         $this->horseRepository->save($horse);
 
@@ -88,7 +87,7 @@ final class HorseService
      */
     public function deleteHorse(string $horseUuid): void
     {
-        $horse = $this->horseRepository->findOneByEncodedUuid($horseUuid);
+        $horse = $this->horseRepository->findOneByUuid($horseUuid);
         $this->horseRepository->delete($horse);
     }
 

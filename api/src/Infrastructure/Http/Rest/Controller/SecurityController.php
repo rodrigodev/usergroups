@@ -60,7 +60,7 @@ final class SecurityController extends AbstractController
      * @return View
      * @throws WrongUserOrPasswordException
      */
-    public function login(TokenAuthenticator $authenticator, GuardAuthenticatorHandler $guardHandler, Request $request)
+    public function login(TokenAuthenticator $authenticator, GuardAuthenticatorHandler $guardHandler, Request $request): View
     {
         $username = $request->get('username');
         $password = $request->get('password');
