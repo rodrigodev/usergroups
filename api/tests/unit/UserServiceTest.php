@@ -9,17 +9,18 @@ use App\Application\Request\User\UserRequest;
 use App\Application\Service\UserService;
 use App\Domain\Model\User;
 use App\Domain\Model\UserRepositoryInterface;
-use App\Infrastructure\Http\Rest\Controller\UserController;
 use App\Infrastructure\Repository\UserRepository;
-use PHPUnit\Framework\MockObject\MockObject;
+use Faker\Factory;
 use PHPUnit\Framework\TestCase;
 
 final class UserServiceTest extends TestCase
 {
     public function testUserCreation() {
-        $name = 'Dave';
-        $username = 'dave_mustaine';
-        $password = '123456';
+        $faker = Factory::create();
+
+        $name = $faker->name;
+        $username = $faker->userName;
+        $password = $faker->password;
 
         $user = new User();
         $user->setName($name);
@@ -42,7 +43,7 @@ final class UserServiceTest extends TestCase
         $userService = new UserService($userRepository, new UserRequestHandler());
         $resultUser = $userService->addUser($userData);
 
-        $this->assertEquals('Dave', $resultUser->getName());
-        $this->assertEquals('dave_mustaine', $resultUser->getUsername());
+        $this->assertEquals($name, $resultUser->getName());
+        $this->assertEquals($username, $resultUser->getUsername());
     }
 }

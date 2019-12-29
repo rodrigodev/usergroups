@@ -20,7 +20,7 @@ class ExampleTest extends TestCase
     public function someProvider() {
         return [
             "One plus One"      => [2, 1, 1],
-            "One plus zero"     => [10, 1, 9],
+            "One plus Nine"     => [10, 1, 9],
             "Zero plus zero"    => [0, 0, 0]
         ];
     }

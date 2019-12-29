@@ -2,6 +2,7 @@
 
 namespace App\Infrastructure\Http\Rest\Controller;
 
+use App\Application\Exceptions\ValidationException;
 use App\Application\Request\User\UserRequest;
 use App\Application\Service\UserService;
 use App\Security\TokenAuthenticator;
@@ -16,6 +17,7 @@ use Swagger\Annotations as Swagger;
 use App\Domain\Model\User;
 use Symfony\Component\Security\Guard\AuthenticatorInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class UserController extends AbstractFOSRestController
 {
@@ -36,12 +38,13 @@ final class UserController extends AbstractFOSRestController
     /**
      * Creates a User resource
      * @Rest\Post("/users", name="post_user")
-     * @param UserRequest $userRequest
+     * @param Request $request
+     * @param ValidatorInterface $validator
      * @return View
+     * @throws ValidationException
      * @Swagger\Parameter(
      *     name="name",
      *     in="body",
-     *     type="string",
      *     description="The user name",
      *     @Swagger\Schema(ref=@Model(type=UserRequest::class))
      * )
@@ -50,18 +53,17 @@ final class UserController extends AbstractFOSRestController
      *     description="Created"
      * )
      * @Swagger\Tag(name="Users")
-     *
      */
-    public function postUser(UserRequest $userRequest): View
+    public function postUser(Request $request, ValidatorInterface $validator): View
     {
-        $user = $this->userService->addUser($userRequest);
+        $user = $this->userService->addUser(UserRequest::createFromRequest($request, $validator));
 
         // In case our POST was a success we need to return a 201 HTTP CREATED response with the created object
         return View::create($user, Response::HTTP_CREATED);
     }
 
     /**
-     * Retrieves an User resource
+     * Retrieves a User resource
      * @Rest\Get("/users/{userId}")
      * @param int $userId
      * @return View
@@ -102,25 +104,33 @@ final class UserController extends AbstractFOSRestController
      * Replaces User resource
      * @Rest\Put("/users/{userId}")
      * @param int $userId
-     * @param UserRequest $userRequest
+     * @param Request $request
+     * @param ValidatorInterface $validator
      * @return View
      * @throws EntityNotFoundException
+     * @throws ValidationException
+     * @Swagger\Parameter(
+     *     name="name",
+     *     in="body",
+     *     description="The user data",
+     *     @Swagger\Schema(ref=@Model(type=UserRequest::class))
+     * )
      * @Swagger\Response(
      *     response=200,
      *     description="Replaces a user resource"
      * )
      * @Swagger\Tag(name="Users")
      */
-    public function putUser(int $userId, UserRequest $userRequest): View
+    public function putUser(int $userId, Request $request, ValidatorInterface $validator): View
     {
-        $user = $this->userService->updateUser($userId, $userRequest);
+        $user = $this->userService->updateUser($userId, UserRequest::createFromRequest($request, $validator));
 
         // In case our PUT was a success we need to return a 200 HTTP OK response with the object as a result of PUT
         return View::create($user, Response::HTTP_OK);
     }
 
     /**
-     * Removes the User resource
+     * Removes a User resource
      * @Rest\Delete("/users/{userId}")
      * @param int $userId
      * @return View

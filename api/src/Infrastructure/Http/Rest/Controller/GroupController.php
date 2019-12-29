@@ -2,7 +2,9 @@
 
 namespace App\Infrastructure\Http\Rest\Controller;
 
+use App\Application\Exceptions\ValidationException;
 use App\Application\Service\GroupService;
+use App\Domain\Model\Group;
 use Doctrine\ORM\EntityNotFoundException;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,6 +15,7 @@ use Swagger\Annotations as Swagger;
 use App\Application\Request\Group\GroupRequest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Nelmio\ApiDocBundle\Annotation\Model;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class GroupController extends AbstractFOSRestController
 {
@@ -32,13 +35,14 @@ final class GroupController extends AbstractFOSRestController
 
     /**
      * Creates a Group resource
-     * @param GroupRequest $groupRequest
-     * @Rest\Post("/groups", name="create_group")
+     * @param Request $request
+     * @param ValidatorInterface $validator
      * @return View
+     * @throws ValidationException
+     * @Rest\Post("/groups", name="create_group")
      * @Swagger\Parameter(
      *     name="create group request",
      *     in="body",
-     *     type="string",
      *     description="A request to create a group",
      *     @Swagger\Schema(ref=@Model(type=GroupRequest::class))
      * )
@@ -49,16 +53,16 @@ final class GroupController extends AbstractFOSRestController
      * @Swagger\Tag(name="Groups")
      *
      */
-    public function postGroup(GroupRequest $groupRequest): View
+    public function postGroup(Request $request, ValidatorInterface $validator): View
     {
-        $group = $this->groupService->addGroup($groupRequest);
+        $group = $this->groupService->addGroup(GroupRequest::createFromRequest($request, $validator));
 
         // In case our POST was a success we need to return a 201 HTTP CREATED response with the created object
         return View::create($group, Response::HTTP_CREATED);
     }
 
     /**
-     * Retrieves an Group resource
+     * Retrieves a Group resource
      * @param int $groupId
      * @Rest\Get("/groups/{groupId}")
      * @return View
@@ -99,25 +103,27 @@ final class GroupController extends AbstractFOSRestController
      * Replaces Group resource
      * @param int $groupId
      * @param Request $request
-     * @Rest\Put("/groups/{groupId}")
+     * @param ValidatorInterface $validator
      * @return View
      * @throws EntityNotFoundException
+     * @throws ValidationException
+     * @Rest\Put("/groups/{groupId}")
      * @Swagger\Response(
      *     response=200,
      *     description="Replaces a group resource"
      * )
      * @Swagger\Tag(name="Groups")
      */
-    public function putGroup(int $groupId, Request $request): View
+    public function putGroup(int $groupId, Request $request, ValidatorInterface $validator): View
     {
-        $group = $this->groupService->updateGroup($groupId, $request->get('name'));
+        $group = $this->groupService->updateGroup($groupId, GroupRequest::createFromRequest($request, $validator));
 
         // In case our PUT was a success we need to return a 200 HTTP OK response with the object as a result of PUT
         return View::create($group, Response::HTTP_OK);
     }
 
     /**
-     * Removes the Group resource
+     * Removes a Group resource
      * @Rest\Delete("/groups/{groupId}")
      * @throws EntityNotFoundException
      * @param int $groupId

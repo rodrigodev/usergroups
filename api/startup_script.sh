@@ -7,8 +7,8 @@ if [ ! -e $CONTAINER_ALREADY_STARTED ]; then
     echo "-- First container startup --"
     make install
     make setup
-    make fixture
     make test
+    make fixture
 else
     echo "-- Not first container startup --"
 fi
