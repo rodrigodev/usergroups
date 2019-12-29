@@ -5,7 +5,7 @@ install:
 	@composer install
 
 setup:
-	@bin/console doctrine:database:create && bin/console doctrine:schema:create
+	@bin/console doctrine:database:create --if-not-exists && bin/console doctrine:schema:update --force
 
 fixtures:
 	@bin/console doctrine:fixtures:load --quiet

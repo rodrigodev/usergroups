@@ -1,6 +1,10 @@
 # User Groups
 
 ## General
+### Requirements
+- docker
+- docker-compose
+
 ### Installation
 
 `$ make build`
