@@ -1,5 +1,5 @@
-# See https://github.com/docker-library/php/blob/master/7.3/fpm/Dockerfile
-FROM php:7.3-fpm
+# See https://github.com/docker-library/php/blob/master/7.4/fpm/Dockerfile
+FROM php:7.4-fpm
 ARG TIMEZONE
 
 RUN apt-get update && apt-get install -y \

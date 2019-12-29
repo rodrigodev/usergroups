@@ -7,9 +7,11 @@ use App\Application\Service\WrongUserOrPasswordException;
 use App\Security\TokenAuthenticator;
 use Doctrine\ORM\EntityNotFoundException;
 use FOS\RestBundle\View\View;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ControllerArgumentsEvent;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -30,12 +32,19 @@ final class SecurityController extends AbstractController
     private $userService;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * UserController constructor.
      * @param UserService $userService
+     * @param LoggerInterface $logger
      */
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, LoggerInterface $logger)
     {
         $this->userService = $userService;
+        $this->logger = $logger;
     }
 
     /**
@@ -46,10 +55,11 @@ final class SecurityController extends AbstractController
      *     response=200,
      *     description="Returns authentication token",
      * )
-     *
      * @Swagger\Parameter(
      *     name="Login Request",
      *     in="body",
+     *     type="json",
+     *     format="application/json",
      *     description="The user and password",
      *     @Swagger\Schema(ref=@Model(type=LoginRequest::class))
      * )

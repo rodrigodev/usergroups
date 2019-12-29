@@ -5,6 +5,7 @@ namespace App\Infrastructure\Http\Rest\Controller;
 use App\Application\Exceptions\ValidationException;
 use App\Application\Service\HorseService;
 use Doctrine\ORM\EntityNotFoundException;
+use Exception;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\View\View;
@@ -15,6 +16,7 @@ use App\Application\Request\Horse\HorseRequest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class HorseController extends AbstractFOSRestController
@@ -22,15 +24,22 @@ final class HorseController extends AbstractFOSRestController
     /**
      * @var HorseService
      */
-    private $horseService;
+    private HorseService $horseService;
+
+    /**
+     * @var ValidatorInterface
+     */
+    private ValidatorInterface $validator;
 
     /**
      * HorseController constructor.
      * @param HorseService $horseService
+     * @param ValidatorInterface $validator
      */
-    public function __construct(HorseService $horseService)
+    public function __construct(HorseService $horseService, ValidatorInterface $validator)
     {
         $this->horseService = $horseService;
+        $this->validator = $validator;
     }
 
     /**
@@ -38,7 +47,7 @@ final class HorseController extends AbstractFOSRestController
      * @param Request $request
      * @param ValidatorInterface $validator
      * @return View
-     * @throws ValidationException
+     * @throws Exception
      * @Rest\Post("/horses", name="create_horse")
      * @Swagger\Parameter(
      *     name="create horse request",
@@ -54,7 +63,15 @@ final class HorseController extends AbstractFOSRestController
      */
     public function postHorse(Request $request, ValidatorInterface $validator): View
     {
-        $horse = $this->horseService->addHorse(HorseRequest::createFromRequest($request, $validator));
+        $horseRequest = HorseRequest::createFromRequest($request);
+
+        try {
+            $this->validate($horseRequest);
+        } catch (ValidationException $e) {
+            throw new HttpException(500, $e->getMessage());
+        }
+
+        $horse = $this->horseService->addHorse($horseRequest);
 
         // In case our POST was a success we need to return a 201 HTTP CREATED response with the created object
         return View::create($horse, Response::HTTP_CREATED);
@@ -74,7 +91,7 @@ final class HorseController extends AbstractFOSRestController
      */
     public function getHorse(string $horseUuid): View
     {
-            $horse = $this->horseService->getHorse($horseUuid);
+        $horse = $this->horseService->getHorse($horseUuid);
 
         // In case our GET was a success we need to return a 200 HTTP OK response with the request object
         return View::create($horse, Response::HTTP_OK);
@@ -104,8 +121,7 @@ final class HorseController extends AbstractFOSRestController
      * @param Request $request
      * @param ValidatorInterface $validator
      * @return View
-     * @throws ValidationException
-     * @throws \Exception
+     * @throws Exception
      * @Rest\Put("/horses/{horseUuid}")
      * @Swagger\Parameter(
      *     name="name",
@@ -121,7 +137,15 @@ final class HorseController extends AbstractFOSRestController
      */
     public function putHorse(string $horseUuid, Request $request, ValidatorInterface $validator): View
     {
-        $horse = $this->horseService->updateHorse($horseUuid, HorseRequest::createFromRequest($request, $validator));
+        $horseRequest = HorseRequest::createFromRequest($request);
+
+        try {
+            $this->validate($horseRequest);
+        } catch (ValidationException $e) {
+            throw new HttpException(500, $e->getMessage());
+        }
+
+        $horse = $this->horseService->updateHorse($horseUuid, $horseRequest);
 
         // In case our PUT was a success we need to return a 200 HTTP OK response with the object as a result of PUT
         return View::create($horse, Response::HTTP_OK);
@@ -145,5 +169,18 @@ final class HorseController extends AbstractFOSRestController
 
         // In case our DELETE was a success we need to return a 204 HTTP NO CONTENT response. The object is deleted.
         return View::create([], Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @param HorseRequest $horseRequest
+     * @throws ValidationException
+     */
+    private function validate(HorseRequest $horseRequest): void
+    {
+        $errors = $this->validator->validate($horseRequest);
+
+        if (count($errors) > 0) {
+            throw new ValidationException((string) $errors);
+        }
     }
 }
