@@ -84,9 +84,9 @@ class HorseControllerTest extends KernelTestCase
             ->get($id);
     }
 
-    public function functionGetAll(): void
+    public function testGetAll(): void
     {
-        $response = $this->client->get('/api/horses/%s', [
+        $response = $this->client->get('/api/horses', [
             'headers' => [
                 'X-AUTH-TOKEN' => $this->token
             ]
